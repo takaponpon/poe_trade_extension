@@ -5,7 +5,7 @@
   "main": "background.js",
   "scripts": {
     "test-ui": "node scratch/test_extension.js",
-    "dev-browser": "powershell -Command \"Start-Process 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe' -ArgumentList '--user-data-dir=$pwd\\.chrome-profile', '--load-extension=$pwd', 'https://jp.pathofexile.com/trade2/search/poe2/'\""
+    "dev-browser": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --user-data-dir=\"%CD%\\.chrome-profile\" --load-extension=\"%CD%\" --new-window \"https://jp.pathofexile.com/trade2/search/poe2/\""
   },
   "devDependencies": {
     "puppeteer": "^22.6.0"
