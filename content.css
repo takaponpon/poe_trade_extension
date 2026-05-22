@@ -1,0 +1,298 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600&display=swap');
+
+:host {
+  /* Design system tokens */
+  --poe-bg-darker: #0c0d10;
+  --poe-bg-dark: #14171d;
+  --poe-bg-panel: #1a1e26;
+  --poe-gold: #c89c3c;
+  --poe-gold-bright: #f0c35e;
+  --poe-gold-dim: #9b772c;
+  --poe-gold-glow: rgba(200, 156, 60, 0.2);
+  --poe-amber: #e67e22;
+  --poe-danger: #e74c3c;
+  --poe-success: #2ecc71;
+  --poe-text: #e2e8f0;
+  --poe-text-muted: #8e9cae;
+  --poe-border: rgba(200, 156, 60, 0.25);
+  --poe-border-focus: rgba(240, 195, 94, 0.6);
+  --sidebar-width: 250px;
+  --sidebar-collapsed-width: 40px;
+  
+  /* Fonts */
+  --font-header: 'Cinzel', serif;
+  --font-body: 'Inter', sans-serif;
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  z-index: 999999; /* Always on top of the website */
+  font-family: var(--font-body);
+  color: var(--poe-text);
+  box-sizing: border-box;
+}
+
+/* Sidebar Outer Container */
+.sidebar-container {
+  height: 100%;
+  width: var(--sidebar-width);
+  background: linear-gradient(135deg, var(--poe-bg-darker) 0%, var(--poe-bg-dark) 100%);
+  border-left: 2px solid var(--poe-gold);
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+.sidebar-container.collapsed {
+  width: var(--sidebar-collapsed-width);
+}
+
+/* Collapse / Toggle Button */
+.toggle-btn {
+  position: absolute;
+  top: 15px;
+  left: 10px;
+  width: 24px;
+  height: 24px;
+  background: var(--poe-bg-panel);
+  border: 1px solid var(--poe-gold);
+  border-radius: 4px;
+  color: var(--poe-gold-bright);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+  font-weight: bold;
+  padding: 0;
+}
+
+.toggle-btn:hover {
+  background: var(--poe-gold);
+  color: var(--poe-bg-darker);
+  box-shadow: 0 0 8px var(--poe-gold-glow);
+}
+
+.sidebar-container.collapsed .toggle-btn {
+  left: 8px;
+  transform: rotate(180deg);
+}
+
+/* Header Section */
+.sidebar-header {
+  padding: 50px 15px 15px 15px; /* Leave top space for toggle when not collapsed */
+  border-bottom: 1px solid var(--poe-border);
+  background: rgba(0, 0, 0, 0.2);
+  transition: opacity 0.2s ease;
+}
+
+.sidebar-container.collapsed .sidebar-header {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar-title {
+  font-family: var(--font-header);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--poe-gold-bright);
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  margin: 0 0 4px 0;
+  letter-spacing: 1px;
+}
+
+.sidebar-subtitle {
+  font-size: 10px;
+  color: var(--poe-text-muted);
+  text-align: center;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Content Area */
+.sidebar-content {
+  flex: 1;
+  padding: 20px 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar-content::-webkit-scrollbar {
+  width: 4px;
+}
+.sidebar-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-content::-webkit-scrollbar-thumb {
+  background: var(--poe-border);
+  border-radius: 2px;
+}
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: var(--poe-gold-dim);
+}
+
+.sidebar-container.collapsed .sidebar-content {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Section Box */
+.sidebar-section {
+  background: rgba(26, 30, 38, 0.5);
+  border: 1px solid var(--poe-border);
+  border-radius: 6px;
+  padding: 12px;
+  transition: border-color 0.2s ease;
+}
+
+.sidebar-section:hover {
+  border-color: rgba(200, 156, 60, 0.5);
+}
+
+.section-title {
+  font-family: var(--font-header);
+  font-size: 12px;
+  color: var(--poe-gold-bright);
+  margin: 0 0 10px 0;
+  border-bottom: 1px solid rgba(200, 156, 60, 0.15);
+  padding-bottom: 4px;
+}
+
+/* Elegant Switch styling */
+.control-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.control-group:last-child {
+  margin-bottom: 0;
+}
+
+.control-label {
+  font-size: 12px;
+  color: var(--poe-text);
+  font-weight: 500;
+}
+
+/* Switch styling */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 20px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #2c3540;
+  transition: .3s;
+  border-radius: 20px;
+  border: 1px solid var(--poe-border);
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 2px;
+  bottom: 2px;
+  background-color: var(--poe-text-muted);
+  transition: .3s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: rgba(200, 156, 60, 0.25);
+  border-color: var(--poe-gold-bright);
+}
+
+input:checked + .slider:before {
+  transform: translateX(18px);
+  background-color: var(--poe-gold-bright);
+  box-shadow: 0 0 6px var(--poe-gold-bright);
+}
+
+/* Form Controls */
+.text-input {
+  width: 100%;
+  background: var(--poe-bg-darker);
+  border: 1px solid var(--poe-border);
+  border-radius: 4px;
+  color: var(--poe-text);
+  padding: 6px 8px;
+  font-size: 12px;
+  box-sizing: border-box;
+  font-family: var(--font-body);
+  transition: all 0.2s ease;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: var(--poe-gold-bright);
+  box-shadow: 0 0 8px var(--poe-gold-glow);
+}
+
+/* Gold Button */
+.btn-gold {
+  width: 100%;
+  background: linear-gradient(180deg, var(--poe-gold) 0%, var(--poe-gold-dim) 100%);
+  border: 1px solid #7c5f21;
+  border-radius: 4px;
+  color: #14171d;
+  font-family: var(--font-header);
+  font-weight: 700;
+  font-size: 11px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-gold:hover {
+  background: linear-gradient(180deg, var(--poe-gold-bright) 0%, var(--poe-gold) 100%);
+  box-shadow: 0 0 10px rgba(240, 195, 94, 0.4);
+}
+
+.btn-gold:active {
+  transform: translateY(1px);
+}
+
+/* Footer Section */
+.sidebar-footer {
+  padding: 15px;
+  border-top: 1px solid var(--poe-border);
+  background: rgba(0, 0, 0, 0.3);
+  text-align: center;
+  font-size: 9px;
+  color: var(--poe-text-muted);
+  transition: opacity 0.2s ease;
+}
+
+.sidebar-container.collapsed .sidebar-footer {
+  opacity: 0;
+  pointer-events: none;
+}
