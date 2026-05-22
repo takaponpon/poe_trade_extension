@@ -16,7 +16,7 @@
   --poe-text-muted: #8e9cae;
   --poe-border: rgba(200, 156, 60, 0.25);
   --poe-border-focus: rgba(240, 195, 94, 0.6);
-  --sidebar-width: 250px;
+  --sidebar-width: 300px;
   --sidebar-collapsed-width: 40px;
   
   /* Fonts */
@@ -51,13 +51,32 @@
   width: var(--sidebar-collapsed-width);
 }
 
+/* Draggable Resize Handle (Invisible 5px boundary on the left border) */
+.resize-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  cursor: ew-resize;
+  z-index: 100;
+  background: transparent;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.resize-handle:hover,
+.resize-handle.resizing {
+  background-color: var(--poe-gold);
+  box-shadow: 0 0 10px var(--poe-gold-glow);
+}
+
 /* Collapse / Toggle Button */
 .toggle-btn {
   position: absolute;
   top: 15px;
-  left: 10px;
-  width: 24px;
-  height: 24px;
+  left: 15px;
+  width: 28px;
+  height: 28px;
   background: var(--poe-bg-panel);
   border: 1px solid var(--poe-gold);
   border-radius: 4px;
@@ -119,11 +138,11 @@
 /* Content Area */
 .sidebar-content {
   flex: 1;
-  padding: 20px 15px;
+  padding: 15px 15px 20px 15px; /* Reduced top padding to align with toggle button */
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px; /* Reduced gap to bring sections closer together */
   transition: opacity 0.2s ease;
 }
 
@@ -151,7 +170,7 @@
   background: rgba(26, 30, 38, 0.5);
   border: 1px solid var(--poe-border);
   border-radius: 6px;
-  padding: 12px;
+  padding: 10px;
   transition: border-color 0.2s ease;
 }
 
@@ -168,71 +187,42 @@
   padding-bottom: 4px;
 }
 
-/* Elegant Switch styling */
-.control-group {
+/* Collapsible Section Accordion */
+.collapsible-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
-}
-.control-group:last-child {
-  margin-bottom: 0;
-}
-
-.control-label {
-  font-size: 12px;
-  color: var(--poe-text);
-  font-weight: 500;
-}
-
-/* Switch styling */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 38px;
-  height: 20px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
+  align-items: center;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #2c3540;
-  transition: .3s;
-  border-radius: 20px;
-  border: 1px solid var(--poe-border);
+  user-select: none;
+  margin-bottom: 0 !important;
 }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 14px;
-  width: 14px;
-  left: 2px;
-  bottom: 2px;
-  background-color: var(--poe-text-muted);
-  transition: .3s;
-  border-radius: 50%;
+.collapsible-header:hover {
+  color: var(--poe-gold-bright);
 }
 
-input:checked + .slider {
-  background-color: rgba(200, 156, 60, 0.25);
-  border-color: var(--poe-gold-bright);
+.chevron-icon {
+  font-size: 9px;
+  transition: transform 0.2s ease;
+  color: var(--poe-gold);
+  transform: rotate(0deg);
 }
 
-input:checked + .slider:before {
-  transform: translateX(18px);
-  background-color: var(--poe-gold-bright);
-  box-shadow: 0 0 6px var(--poe-gold-bright);
+.collapsible-header.collapsed .chevron-icon {
+  transform: rotate(-90deg);
+}
+
+.collapsible-content {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.2s ease;
+}
+
+.collapsible-content.active {
+  max-height: 300px; /* High enough to contain filters and tag pills */
+  opacity: 1;
+  overflow: visible;
 }
 
 /* Form Controls */
@@ -255,7 +245,12 @@ input:checked + .slider:before {
   box-shadow: 0 0 8px var(--poe-gold-glow);
 }
 
-/* Gold Button */
+.text-input.error {
+  border-color: var(--poe-danger) !important;
+  box-shadow: 0 0 8px rgba(231, 76, 60, 0.3) !important;
+}
+
+/* Buttons */
 .btn-gold {
   width: 100%;
   background: linear-gradient(180deg, var(--poe-gold) 0%, var(--poe-gold-dim) 100%);
@@ -281,18 +276,1128 @@ input:checked + .slider:before {
   transform: translateY(1px);
 }
 
-/* Footer Section */
-.sidebar-footer {
-  padding: 15px;
-  border-top: 1px solid var(--poe-border);
-  background: rgba(0, 0, 0, 0.3);
-  text-align: center;
-  font-size: 9px;
-  color: var(--poe-text-muted);
-  transition: opacity 0.2s ease;
+.btn-gray {
+  width: 100%;
+  background: #2d3542;
+  border: 1px solid #4a576d;
+  border-radius: 4px;
+  color: var(--poe-text);
+  font-family: var(--font-header);
+  font-weight: 700;
+  font-size: 11px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.sidebar-container.collapsed .sidebar-footer {
+.btn-gray:hover {
+  background: #3e495b;
+  border-color: #5d6d87;
+}
+
+.btn-danger {
+  width: 100%;
+  background: linear-gradient(180deg, var(--poe-danger) 0%, #c0392b 100%);
+  border: 1px solid #962d22;
+  border-radius: 4px;
+  color: #fff;
+  font-family: var(--font-header);
+  font-weight: 700;
+  font-size: 11px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-danger:hover {
+  background: linear-gradient(180deg, #ff6b6b 0%, var(--poe-danger) 100%);
+  box-shadow: 0 0 10px rgba(231, 76, 60, 0.4);
+}
+
+.btn-icon {
+  background: var(--poe-bg-panel);
+  border: 1px solid var(--poe-border);
+  border-radius: 4px;
+  color: var(--poe-text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.btn-icon:hover {
+  border-color: var(--poe-gold-bright);
+  color: var(--poe-gold-bright);
+  background: rgba(200, 156, 60, 0.1);
+}
+
+.btn-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Inline Form Containers */
+.inline-form-container {
+  max-height: 0;
+  overflow: hidden;
   opacity: 0;
+  margin-top: 0;
+  padding: 0 12px;
+  background: rgba(12, 13, 16, 0.6);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: max-height 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+              opacity 0.25s ease, 
+              margin-top 0.3s ease, 
+              padding 0.3s ease, 
+              border-color 0.3s ease;
+}
+
+.inline-form-container.active {
+  max-height: 380px; /* High enough to accommodate title, input, tag list, and buttons */
+  opacity: 1;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-color: var(--poe-gold);
+  box-shadow: inset 0 0 10px rgba(200, 156, 60, 0.1);
+  overflow-y: auto;
+}
+
+.inline-form-title {
+  font-family: var(--font-header);
+  font-size: 11px;
+  color: var(--poe-gold-bright);
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(200, 156, 60, 0.15);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.inline-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* Extra small button sizes for cramped inline spaces */
+.btn-sm {
+  padding: 5px 8px !important;
+  font-size: 9px !important;
+}
+
+.btn-xs {
+  padding: 2px 6px !important;
+  font-size: 8px !important;
+  font-family: var(--font-body) !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  letter-spacing: 0px !important;
+  border-radius: 2px !important;
+  height: 18px;
+  line-height: 12px;
+  width: auto !important;
+}
+
+/* Inline duplication warning box */
+.inline-warning-box {
+  background: rgba(230, 126, 34, 0.08);
+  border: 1px solid rgba(230, 126, 34, 0.3);
+  border-radius: 4px;
+  padding: 8px;
+  margin-top: 4px;
+}
+
+.warning-message {
+  font-size: 10px;
+  color: var(--poe-text);
+  line-height: 1.4;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+/* In-place Confirm styles */
+.in-place-confirm-text {
+  font-size: 9px;
+  color: var(--poe-danger);
+  font-weight: 600;
+  margin-right: 4px;
+  align-self: center;
+  white-space: nowrap;
+}
+
+.in-place-folder-confirm {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(5px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-label {
+  font-size: 9px;
+  color: var(--poe-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Tag Suggestions Bubbles */
+.tag-suggestions-box {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(200, 156, 60, 0.1);
+  border-radius: 4px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tag-suggestions-title {
+  font-size: 10px;
+  color: var(--poe-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tag-suggestions-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-height: 80px;
+  overflow-y: auto;
+}
+
+.tag-bubble {
+  background: rgba(200, 156, 60, 0.08);
+  border: 1px solid rgba(200, 156, 60, 0.2);
+  color: var(--poe-gold);
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tag-bubble:hover {
+  background: var(--poe-gold);
+  color: var(--poe-bg-darker);
+  border-color: var(--poe-gold-bright);
+}
+
+.no-tags {
+  font-size: 10px;
+  color: var(--poe-text-muted);
+  font-style: italic;
+}
+
+/* Filters Layout */
+.filter-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.search-box-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.search-icon {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  color: var(--poe-text-muted);
   pointer-events: none;
 }
+
+.search-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.search-box-wrapper .text-input {
+  padding-left: 28px;
+}
+
+.tag-filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 5px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(200, 156, 60, 0.1);
+}
+
+.filter-tag-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--poe-text-muted);
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-tag-pill:hover {
+  border-color: var(--poe-gold-bright);
+  color: var(--poe-gold-bright);
+}
+
+.filter-tag-pill.active {
+  background: rgba(200, 156, 60, 0.2);
+  border-color: var(--poe-gold-bright);
+  color: var(--poe-gold-bright);
+  box-shadow: 0 0 6px var(--poe-gold-glow);
+}
+
+.toggle-all-tags-btn {
+  background: rgba(200, 156, 60, 0.05);
+  border: 1px solid rgba(200, 156, 60, 0.25);
+  color: var(--poe-gold);
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.toggle-all-tags-btn:hover {
+  background: rgba(200, 156, 60, 0.15);
+  border-color: var(--poe-gold-bright);
+  color: var(--poe-gold-bright);
+  box-shadow: 0 0 6px var(--poe-gold-glow);
+}
+
+/* Saved List Grid */
+.flex-fill {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.saved-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 2px;
+}
+
+.saved-list::-webkit-scrollbar {
+  width: 3px;
+}
+.saved-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.saved-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1.5px;
+}
+.saved-list::-webkit-scrollbar-thumb:hover {
+  background: var(--poe-gold-dim);
+}
+
+.saved-item {
+  background: rgba(20, 23, 29, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 4px;
+  padding: 0 10px;
+  height: var(--item-height, 36px);
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease, height 0.1s ease;
+  gap: 10px;
+}
+
+.saved-item:hover {
+  background: rgba(26, 30, 38, 0.8);
+  border-color: rgba(200, 156, 60, 0.3);
+}
+
+.saved-item-info {
+  flex: 1;
+  min-width: 0; /* Enable text truncation */
+  display: flex;
+  align-items: center;
+}
+
+.saved-item-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+  width: 100%;
+}
+
+.saved-item-name {
+  flex: 1;
+  font-size: var(--item-font-size, 12px);
+  font-weight: 500;
+  color: var(--poe-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  line-height: 1.2;
+}
+
+.saved-item-tags {
+  display: flex;
+  flex-wrap: nowrap; /* Keep tags on a single row next to the name */
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.saved-item-tag-badge {
+  background: rgba(200, 156, 60, 0.05);
+  border: 1px solid rgba(200, 156, 60, 0.12);
+  color: var(--poe-gold);
+  font-size: var(--item-tag-font-size, 8px);
+  padding: 1px 4px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.saved-item-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.action-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: var(--item-btn-size, 20px);
+  height: var(--item-btn-size, 20px);
+  border-radius: 4px;
+  color: var(--poe-text-muted);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.action-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.eye-btn:hover {
+  color: var(--poe-gold-bright);
+}
+
+.trash-btn:hover {
+  color: var(--poe-danger);
+}
+
+.action-btn svg {
+  width: calc(var(--item-btn-size, 20px) * 0.7);
+  height: calc(var(--item-btn-size, 20px) * 0.7);
+}
+
+.no-items {
+  font-size: 11px;
+  color: var(--poe-text-muted);
+  text-align: center;
+  padding: 20px 0;
+  font-style: italic;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+/* Save Controls Wrapper */
+.save-controls-wrapper {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  align-items: center;
+  padding-left: 36px; /* Space for the absolute toggle button (28px + 8px gap) */
+  box-sizing: border-box;
+}
+
+/* Folder System Styling */
+.folder-group {
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.folder-header {
+  display: flex;
+  align-items: center;
+  background: rgba(20, 23, 29, 0.6);
+  border: 1px solid var(--poe-border);
+  border-radius: 4px;
+  padding: 0 10px;
+  height: var(--item-height, 36px);
+  box-sizing: border-box;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease, height 0.1s ease;
+  position: relative;
+}
+
+.folder-header:hover {
+  background: rgba(26, 30, 38, 0.9);
+  border-color: rgba(200, 156, 60, 0.4);
+}
+
+/* Beautiful pulsing gold highlight on D&D hover */
+.folder-header.drag-hover {
+  border-color: var(--poe-gold-bright) !important;
+  box-shadow: 0 0 10px var(--poe-gold-bright) !important;
+  background: rgba(200, 156, 60, 0.2) !important;
+  transform: scale(1.01);
+}
+
+.folder-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.folder-icon {
+  display: flex;
+  align-items: center;
+  color: var(--poe-gold);
+  flex-shrink: 0;
+}
+
+.folder-icon svg {
+  width: var(--item-icon-size, 14px);
+  height: var(--item-icon-size, 14px);
+}
+
+.folder-name {
+  font-family: var(--font-header);
+  font-size: var(--item-font-size, 12px);
+  font-weight: 700;
+  color: var(--poe-gold-bright);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.folder-chevron {
+  font-size: var(--item-tag-font-size, 8px);
+  color: var(--poe-gold);
+  margin-left: 8px;
+  margin-right: 8px;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  user-select: none;
+  transform: rotate(0deg);
+}
+
+.folder-header.collapsed .folder-chevron {
+  transform: rotate(-90deg);
+}
+
+.folder-trash-btn {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  flex-shrink: 0;
+}
+
+.folder-header:hover .folder-trash-btn {
+  opacity: 1;
+}
+
+.folder-contents {
+  padding-left: 12px;
+  border-left: 1.5px solid rgba(200, 156, 60, 0.15);
+  margin-left: 16px;
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.folder-contents.collapsed {
+  display: none;
+}
+
+.folder-empty-placeholder {
+  font-size: 10px;
+  color: var(--poe-text-muted);
+  text-align: center;
+  padding: 10px 0;
+  border: 1px dashed rgba(200, 156, 60, 0.15);
+  border-radius: 4px;
+  font-style: italic;
+}
+
+/* Unassigned Group System */
+.unassigned-group {
+  margin-top: 12px;
+  border-top: 1px solid rgba(200, 156, 60, 0.15);
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.unassigned-group.drag-hover {
+  border-top-color: var(--poe-gold-bright) !important;
+  box-shadow: inset 0 0 10px rgba(200, 156, 60, 0.1) !important;
+  background: rgba(200, 156, 60, 0.05) !important;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.unassigned-header {
+  font-family: var(--font-header);
+  font-size: 10px;
+  color: var(--poe-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  user-select: none;
+}
+
+.unassigned-contents {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.unassigned-empty-placeholder {
+  font-size: 10px;
+  color: var(--poe-text-muted);
+  text-align: center;
+  padding: 12px 0;
+  font-style: italic;
+}
+
+/* Active dragging item styles */
+.saved-item.dragging {
+  opacity: 0.3 !important;
+  border: 1px dashed var(--poe-gold) !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Active dragging folder styles */
+.folder-group.dragging {
+  opacity: 0.3 !important;
+  border: 1px dashed var(--poe-gold) !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Sidebar background drag hover pulse effect */
+.saved-list.drag-hover {
+  border-color: var(--poe-gold-bright) !important;
+  box-shadow: inset 0 0 15px rgba(200, 156, 60, 0.1) !important;
+}
+
+/* ==========================================
+   Export & Import Styles
+   ========================================== */
+
+/* Checkbox hide by default */
+.export-item-checkbox,
+.export-folder-checkbox {
+  display: none;
+  margin: 0;
+  margin-right: 8px;
+  cursor: pointer;
+  accent-color: var(--poe-gold);
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* Show checkboxes in Export Mode */
+.export-mode .export-item-checkbox,
+.export-mode .export-folder-checkbox {
+  display: inline-block;
+}
+
+/* Guard interactive actions in Export Mode */
+.export-mode .saved-item-actions,
+.export-mode .folder-trash-btn {
+  pointer-events: none;
+  opacity: 0.3;
+}
+.export-mode .saved-item {
+  cursor: default;
+}
+
+/* Export Mode Action Header */
+.export-action-header {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: rgba(200, 156, 60, 0.1);
+  border: 1px solid var(--poe-border);
+  border-radius: 4px;
+  margin-bottom: 10px;
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+.export-mode .export-action-header {
+  display: flex;
+}
+
+.export-select-all-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--poe-text);
+  cursor: pointer;
+  user-select: none;
+}
+
+.export-select-all-label input {
+  margin: 0;
+  accent-color: var(--poe-gold);
+  cursor: pointer;
+}
+
+.export-count-label {
+  font-size: 10px;
+  color: var(--poe-gold-bright);
+  font-weight: 600;
+}
+
+/* Import Dropzone */
+.import-dropzone {
+  border: 2px dashed var(--poe-border);
+  border-radius: 6px;
+  padding: 20px 10px;
+  text-align: center;
+  cursor: pointer;
+  background: rgba(12, 13, 16, 0.4);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+  box-sizing: border-box;
+}
+
+.import-dropzone:hover,
+.import-dropzone.drag-hover {
+  border-color: var(--poe-gold-bright);
+  background: rgba(200, 156, 60, 0.08);
+  box-shadow: 0 0 15px var(--poe-gold-glow);
+}
+
+/* D&D dragover glow pulse */
+.import-dropzone.drag-hover {
+  animation: pulseGold 1.5s infinite;
+}
+
+@keyframes pulseGold {
+  0% { box-shadow: 0 0 5px rgba(200, 156, 60, 0.2); }
+  50% { box-shadow: 0 0 15px rgba(240, 195, 94, 0.6); }
+  100% { box-shadow: 0 0 5px rgba(200, 156, 60, 0.2); }
+}
+
+.import-dropzone-text {
+  font-size: 11px;
+  color: var(--poe-text-muted);
+  line-height: 1.5;
+  user-select: none;
+}
+
+/* Flash feedback animations */
+.import-success {
+  border-color: var(--poe-success) !important;
+  background: rgba(46, 204, 113, 0.1) !important;
+  box-shadow: 0 0 15px rgba(46, 204, 113, 0.2) !important;
+}
+
+.import-success-text {
+  font-size: 11px;
+  color: var(--poe-success);
+  font-weight: 600;
+  line-height: 1.5;
+  animation: scaleIn 0.3s ease;
+}
+
+.import-error {
+  border-color: var(--poe-danger) !important;
+  background: rgba(231, 76, 60, 0.1) !important;
+  box-shadow: 0 0 15px rgba(231, 76, 60, 0.2) !important;
+}
+
+.import-error-text {
+  font-size: 11px;
+  color: var(--poe-danger);
+  font-weight: 600;
+  line-height: 1.5;
+  animation: scaleIn 0.3s ease;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ==========================================
+   Import Conflict Resolution Styles
+   ========================================== */
+
+.import-conflict-container {
+  background: rgba(12, 13, 16, 0.9);
+  border: 1px solid var(--poe-gold-dim);
+  border-radius: 4px;
+  padding: 10px;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: scaleIn 0.25s ease-out;
+}
+
+.conflict-title {
+  font-family: var(--font-header);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--poe-gold-bright);
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(200, 156, 60, 0.15);
+  padding-bottom: 4px;
+}
+
+.conflict-desc {
+  font-size: 9px;
+  color: var(--poe-text-muted);
+  line-height: 1.4;
+}
+
+.conflict-list {
+  max-height: 120px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 4px;
+}
+
+.conflict-list::-webkit-scrollbar {
+  width: 3px;
+}
+.conflict-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.conflict-list::-webkit-scrollbar-thumb {
+  background: rgba(200, 156, 60, 0.2);
+  border-radius: 1.5px;
+}
+.conflict-list::-webkit-scrollbar-thumb:hover {
+  background: var(--poe-gold-dim);
+}
+
+.conflict-item-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(20, 23, 29, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.02);
+  border-radius: 3px;
+  padding: 4px 6px;
+  transition: all 0.2s ease;
+}
+
+.conflict-item-row:hover {
+  background: rgba(26, 30, 38, 0.8);
+  border-color: rgba(200, 156, 60, 0.15);
+}
+
+.conflict-item-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--poe-text);
+  cursor: pointer;
+  user-select: none;
+  min-width: 0;
+  width: 100%;
+}
+
+.conflict-item-checkbox {
+  margin: 0;
+  accent-color: var(--poe-gold);
+  cursor: pointer;
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.conflict-item-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+/* ==========================================================================
+   Settings Panel Styles
+   ========================================================================== */
+
+.settings-panel {
+  display: none;
+  flex: 1;
+  padding: 50px 15px 80px 15px; /* Bottom padding optimized for tooltips */
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  position: relative;
+}
+
+.sidebar-container.settings-mode .sidebar-content {
+  display: none !important;
+}
+
+.sidebar-container.settings-mode .toggle-btn {
+  display: none !important;
+}
+
+.sidebar-container.settings-mode .settings-panel {
+  display: flex;
+  opacity: 1;
+}
+
+.settings-header {
+  border-bottom: 1px solid var(--poe-border);
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.settings-title {
+  font-family: var(--font-header);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--poe-gold-bright);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: 1px;
+}
+
+#settingsBackBtn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 24px;
+  height: 24px;
+  background: var(--poe-bg-panel);
+  border: 1px solid var(--poe-gold);
+  border-radius: 4px;
+  color: var(--poe-gold-bright);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+  z-index: 10;
+}
+
+#settingsBackBtn:hover {
+  background: var(--poe-gold);
+  color: var(--poe-bg-darker);
+  box-shadow: 0 0 8px var(--poe-gold-glow);
+}
+
+#settingsBackBtn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.settings-body {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.settings-section {
+  background: rgba(26, 30, 38, 0.5);
+  border: 1px solid var(--poe-border);
+  border-radius: 6px;
+  padding: 12px;
+  transition: border-color 0.2s ease;
+}
+
+.settings-section:hover {
+  border-color: rgba(200, 156, 60, 0.5);
+}
+
+.settings-section-title {
+  font-family: var(--font-header);
+  font-size: 11px;
+  color: var(--poe-gold-bright);
+  margin: 0 0 10px 0;
+  border-bottom: 1px solid rgba(200, 156, 60, 0.15);
+  padding-bottom: 4px;
+}
+
+
+/* Premium Custom Tooltips */
+.tooltip-trigger {
+  position: relative;
+}
+
+.tooltip-trigger::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translate(-50%, 8px);
+  width: 240px;
+  background: rgba(12, 13, 16, 0.98);
+  border: 1px solid var(--poe-gold-dim);
+  border-radius: 6px;
+  color: var(--poe-text);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: normal;
+  line-height: 1.4;
+  padding: 8px 12px;
+  text-align: left;
+  white-space: normal;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 0 0 10px rgba(200, 156, 60, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10000;
+  transition: opacity 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.tooltip-trigger::before {
+  content: '';
+  position: absolute;
+  bottom: 115%;
+  left: 50%;
+  transform: translate(-50%, 8px);
+  border: 6px solid transparent;
+  border-top-color: var(--poe-gold-dim);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10000;
+  transition: opacity 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.tooltip-trigger:hover::after,
+.tooltip-trigger:hover::before {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ==========================================
+   Premium Switch Toggle Styles
+   ========================================== */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #1a1e26;
+  border: 1px solid var(--poe-border);
+  transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border-radius: 20px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  left: 3px;
+  bottom: 3px;
+  background-color: var(--poe-text-muted);
+  transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+input:checked + .slider {
+  background-color: rgba(200, 156, 60, 0.2);
+  border-color: var(--poe-gold);
+}
+
+input:checked + .slider:before {
+  background-color: var(--poe-gold-bright);
+  transform: translateX(16px);
+  box-shadow: 0 0 5px var(--poe-gold-glow);
+}
+
+/* Hover effects */
+.switch:hover .slider {
+  border-color: rgba(200, 156, 60, 0.5);
+}
+
+.switch:hover input:checked + .slider {
+  border-color: var(--poe-gold-bright);
+}
+
+
+

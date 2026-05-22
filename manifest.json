@@ -38,8 +38,8 @@
         "content.css"
       ],
       "matches": [
-        "https://jp.pathofexile.com/trade2/search/poe2/*",
-        "https://www.pathofexile.com/trade2/search/poe2/*"
+        "https://jp.pathofexile.com/*",
+        "https://www.pathofexile.com/*"
       ]
     }
   ]
