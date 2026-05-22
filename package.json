@@ -1,0 +1,13 @@
+{
+  "name": "poe-trade-sidebar-extension",
+  "version": "1.0.0",
+  "description": "Path of Exile 2 Trade Site Sidebar Extension",
+  "main": "background.js",
+  "scripts": {
+    "test-ui": "node scratch/test_extension.js",
+    "dev-browser": "powershell -Command \"Start-Process chrome -ArgumentList '--user-data-dir=$pwd\\.chrome-profile', '--load-extension=$pwd', 'https://jp.pathofexile.com/trade2/search/poe2/'\""
+  },
+  "devDependencies": {
+    "puppeteer": "^22.6.0"
+  }
+}

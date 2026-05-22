@@ -38,3 +38,7 @@ desktop.ini
 *.njsproj
 *.sln
 *.sw?
+
+# Chrome Dev Profile
+.chrome-profile/
+
