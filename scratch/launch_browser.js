@@ -30,6 +30,31 @@ if (!fs.existsSync(profilePath)) {
   fs.mkdirSync(profilePath, { recursive: true });
 }
 
+// Programmatically enable Developer Mode in the clean profile
+const defaultProfileDir = path.join(profilePath, 'Default');
+if (!fs.existsSync(defaultProfileDir)) {
+  fs.mkdirSync(defaultProfileDir, { recursive: true });
+}
+const prefsPath = path.join(defaultProfileDir, 'Preferences');
+let prefs = {};
+if (fs.existsSync(prefsPath)) {
+  try {
+    prefs = JSON.parse(fs.readFileSync(prefsPath, 'utf8'));
+  } catch (e) {
+    prefs = {};
+  }
+}
+if (!prefs.extensions) {
+  prefs.extensions = {};
+}
+prefs.extensions.developer_mode = true;
+try {
+  fs.writeFileSync(prefsPath, JSON.stringify(prefs, null, 2), 'utf8');
+  console.log('Pre-configured profile: Developer Mode set to TRUE.');
+} catch (err) {
+  console.error('Failed to pre-configure Chrome preferences:', err);
+}
+
 // Spawn Chrome as a completely detached background process
 const chrome = spawn(chromePath, [
   `--user-data-dir=${profilePath}`,
