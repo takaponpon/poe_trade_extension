@@ -1,0 +1,471 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600&display=swap');
+
+:host {
+  /* Design system tokens */
+  --poe-bg-darker: #0c0d10;
+  --poe-bg-dark: #14171d;
+  --poe-bg-panel: #1a1e26;
+  --poe-gold: #c89c3c;
+  --poe-gold-bright: #f0c35e;
+  --poe-gold-dim: #9b772c;
+  --poe-gold-glow: rgba(200, 156, 60, 0.15);
+  
+  --poe-text: #e2e8f0;
+  --poe-text-muted: #8e9cae;
+  --poe-border: rgba(200, 156, 60, 0.25);
+  
+  /* Rarity Colors */
+  --rarity-normal: #c8c8c8;
+  --rarity-magic: #8888ff;
+  --rarity-rare: #ffff77;
+  --rarity-unique: #af6025;
+  --rarity-gem: #1aa29b;
+
+  --sidebar-width: 320px;
+  --sidebar-collapsed-width: 40px;
+  
+  /* Fonts */
+  --font-header: 'Cinzel', serif;
+  --font-body: 'Inter', sans-serif;
+
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  z-index: 999999;
+  font-family: var(--font-body);
+  color: var(--poe-text);
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+/* Sidebar Container */
+.sidebar-container {
+  height: 100vh;
+  max-height: 100vh;
+  width: var(--sidebar-width);
+  background: linear-gradient(135deg, var(--poe-bg-darker) 0%, var(--poe-bg-dark) 100%);
+  border-left: 2px solid var(--poe-gold);
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+  position: relative;
+  pointer-events: auto;
+}
+
+.sidebar-container.collapsed {
+  width: var(--sidebar-collapsed-width);
+}
+
+/* Draggable Resize Handle */
+.resize-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  cursor: ew-resize;
+  z-index: 100;
+  background: transparent;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.resize-handle:hover,
+.resize-handle.resizing {
+  background-color: var(--poe-gold);
+  box-shadow: 0 0 10px var(--poe-gold-glow);
+}
+
+/* Toggle / Collapse Button */
+.toggle-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 28px;
+  height: 28px;
+  background: var(--poe-bg-panel);
+  border: 1px solid var(--poe-gold);
+  border-radius: 4px;
+  color: var(--poe-gold-bright);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+  font-weight: bold;
+  padding: 0;
+}
+
+.toggle-btn:hover {
+  background: var(--poe-gold);
+  color: var(--poe-bg-darker);
+  box-shadow: 0 0 8px var(--poe-gold-glow);
+}
+
+.sidebar-container.collapsed .toggle-btn {
+  left: 8px;
+  transform: rotate(180deg);
+}
+
+/* Header */
+.sidebar-header {
+  padding: 50px 15px 15px 15px;
+  border-bottom: 1px solid var(--poe-border);
+  background: rgba(0, 0, 0, 0.3);
+  transition: opacity 0.2s ease;
+}
+
+.sidebar-container.collapsed .sidebar-header {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar-title {
+  font-family: var(--font-header);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--poe-gold-bright);
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  margin: 0 0 4px 0;
+  letter-spacing: 1px;
+}
+
+.sidebar-subtitle {
+  font-size: 9px;
+  color: var(--poe-text-muted);
+  text-align: center;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Content Area */
+.sidebar-content {
+  flex: 1;
+  padding: 15px 15px 60px 15px; /* Added bottom padding to prevent the lowest items (e.g. Jewels) from clipping when scrolled to the end */
+  overflow-y: auto;
+  min-height: 0;
+  max-height: calc(100vh - 100px);
+  overscroll-behavior-y: contain;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar-content::-webkit-scrollbar {
+  width: 4px;
+}
+.sidebar-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-content::-webkit-scrollbar-thumb {
+  background: var(--poe-border);
+  border-radius: 2px;
+}
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: var(--poe-gold-dim);
+}
+
+.sidebar-container.collapsed .sidebar-content {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Status Panel */
+.status-box {
+  background: rgba(26, 30, 38, 0.6);
+  border: 1px solid var(--poe-border);
+  border-radius: 6px;
+  padding: 12px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.status-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: var(--poe-gold-bright);
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(240, 195, 94, 0.2);
+  border-top: 2px solid var(--poe-gold-bright);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Gear List Section */
+.gear-section {
+  display: flex;
+  flex-direction: column;
+  background: rgba(26, 30, 38, 0.3);
+  border: 1px solid var(--poe-border);
+  border-radius: 6px;
+  padding: 6px 10px 10px 10px;
+  transition: border-color 0.2s ease;
+}
+
+.gear-section:hover {
+  border-color: rgba(200, 156, 60, 0.4);
+}
+
+.gear-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  padding: 4px 0 6px 0;
+  border-bottom: 1px solid rgba(200, 156, 60, 0.15);
+  margin-bottom: 8px;
+}
+
+.gear-section-title {
+  font-family: var(--font-header);
+  font-size: 11px;
+  color: var(--poe-gold-bright);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.chevron-icon {
+  font-size: 9px;
+  transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  color: var(--poe-gold);
+  transform: rotate(0deg);
+}
+
+.collapsible-header.collapsed .chevron-icon {
+  transform: rotate(-90deg);
+}
+
+/* Accordion Content sliding transition */
+.collapsible-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.25s ease;
+}
+
+.collapsible-content.active {
+  max-height: 1600px; /* High enough to contain list of items */
+  opacity: 1;
+}
+
+/* Gear Item Row */
+.gear-item {
+  background: rgba(26, 30, 38, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-left: 3px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.gear-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(200, 156, 60, 0.05) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.gear-item:hover {
+  background: rgba(30, 36, 46, 0.7);
+  border-color: rgba(200, 156, 60, 0.35);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transform: translateY(-1px);
+}
+
+.gear-item:hover::before {
+  opacity: 1;
+}
+
+.gear-item:active {
+  transform: translateY(0);
+}
+
+/* Slot & Name Labels */
+.gear-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gear-slot-label {
+  font-size: 9px;
+  color: var(--poe-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.gear-item-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--poe-text);
+  line-height: 1.3;
+}
+
+.gear-item-base {
+  font-size: 10px;
+  color: var(--poe-text-muted);
+  font-style: italic;
+}
+
+/* Mod List Preview inside item */
+.gear-item-mods {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  padding-top: 4px;
+}
+
+.gear-mod-line {
+  display: flex;
+  align-items: center;
+  font-size: 9px;
+  color: #a0aec0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Rarity Border Highlight */
+.gear-item.rarity-normal {
+  border-left-color: var(--rarity-normal);
+}
+.gear-item.rarity-magic {
+  border-left-color: var(--rarity-magic);
+}
+.gear-item.rarity-rare {
+  border-left-color: var(--rarity-rare);
+}
+.gear-item.rarity-unique {
+  border-left-color: var(--rarity-unique);
+}
+.gear-item.rarity-gem {
+  border-left-color: var(--rarity-gem);
+}
+
+/* Hover glow effect for premium rare/unique items */
+.gear-item.rarity-unique:hover {
+  box-shadow: 0 0 10px rgba(175, 96, 37, 0.2);
+}
+.gear-item.rarity-rare:hover {
+  box-shadow: 0 0 10px rgba(255, 255, 119, 0.15);
+}
+
+/* Empty Slots */
+.gear-item.empty-slot {
+  border-left-style: dashed;
+  border-left-color: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.15);
+  cursor: default;
+  opacity: 0.5;
+}
+
+.gear-item.empty-slot:hover {
+  transform: none;
+  background: rgba(0, 0, 0, 0.15);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+}
+
+/* Toast Notification (Glassmorphic) */
+.toast-notification {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(50px);
+  background: rgba(20, 23, 29, 0.85);
+  border: 1px solid var(--poe-gold);
+  border-radius: 4px;
+  color: var(--poe-text);
+  padding: 8px 16px;
+  font-size: 11px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: 1000;
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+}
+
+.toast-notification.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.toast-warning {
+  border-color: #e74c3c;
+  color: #ff8b8b;
+}
+
+/* Mod badges in item preview */
+.mod-badge {
+  display: inline-block;
+  font-size: 8px;
+  font-weight: bold;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-right: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.badge-implicit {
+  background-color: rgba(220, 95, 0, 0.2);
+  color: #ffaa66;
+  border: 1px solid rgba(220, 95, 0, 0.4);
+}
+
+.badge-enchant {
+  background-color: rgba(155, 89, 182, 0.2);
+  color: #d2b4de;
+  border: 1px solid rgba(155, 89, 182, 0.4);
+}
+
+.badge-desecrated {
+  background-color: rgba(120, 140, 60, 0.2);
+  color: #c5d39a;
+  border: 1px solid rgba(120, 140, 60, 0.4);
+}
+

@@ -1,0 +1,53 @@
+# Dependency directories
+node_modules/
+jspm_packages/
+web_modules/
+
+# Build and distribution
+dist/
+build/
+out/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Optional npm cache directory
+.npm
+
+# Output of 'npm pack'
+*.tgz
+
+# OS files
+.DS_Store
+Thumbs.db
+db.lck
+*.tmp
+*.bak
+desktop.ini
+
+# IDEs and editors
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Chrome Dev Profile
+.chrome-profile/
+
+# Proof of concept exclusions
+poc/sample_code.txt
+poc/*.json
+poc/*.html
+poc/decoded.xml
+poc/filter_sample_payload.txt
+
+# Scratch scripts
+scratch/
