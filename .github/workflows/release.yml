@@ -23,12 +23,12 @@ jobs:
 
       - name: Create release zip
         run: |
-          zip -r poe_trade_sidebar_v${{ steps.get_version.outputs.VERSION }}.zip manifest.json background.js content.js content.css popup.html popup.js popup.css icons/
+          zip -r poe_trade_extension_v${{ steps.get_version.outputs.VERSION }}.zip manifest.json background.js content.js content.css poe_ninja_content.js poe_ninja_content.css pako.min.js items_translation_map.json stats_translation_map.json popup.html popup.js popup.css icons/
 
       - name: Update or Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "poe_trade_sidebar_v${{ steps.get_version.outputs.VERSION }}.zip"
+          artifacts: "poe_trade_extension_v${{ steps.get_version.outputs.VERSION }}.zip"
           tag: "v${{ steps.get_version.outputs.VERSION }}"
           name: "Release v${{ steps.get_version.outputs.VERSION }}"
           body: "Automated release from main branch commit ${{ github.sha }}."
