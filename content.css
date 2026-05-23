@@ -646,6 +646,13 @@
   border-color: rgba(200, 156, 60, 0.3);
 }
 
+.saved-item.editing {
+  height: auto;
+  min-height: var(--item-height, 36px);
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
 .saved-item-info {
   flex: 1;
   min-width: 0; /* Enable text truncation */
@@ -691,6 +698,12 @@
   text-transform: uppercase;
 }
 
+.saved-item-tag-badge.tag-complete {
+  background: rgba(46, 204, 113, 0.1);
+  border-color: rgba(46, 204, 113, 0.3);
+  color: var(--poe-success);
+}
+
 .saved-item-actions {
   display: flex;
   gap: 4px;
@@ -717,6 +730,22 @@
 }
 
 .eye-btn:hover {
+  color: var(--poe-gold-bright);
+}
+
+.external-btn:hover {
+  color: var(--poe-gold-bright);
+}
+
+.edit-btn:hover {
+  color: var(--poe-gold-bright);
+}
+
+.complete-btn:hover {
+  color: var(--poe-success);
+}
+
+.incomplete-btn:hover {
   color: var(--poe-gold-bright);
 }
 

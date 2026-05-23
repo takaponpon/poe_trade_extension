@@ -5,9 +5,12 @@
   "main": "background.js",
   "scripts": {
     "test-ui": "node scratch/test_extension.js",
-    "dev-browser": "node scratch/launch_browser.js"
+    "dev-browser": "node scratch/launch_browser.js",
+    "build": "esbuild src/content.js --bundle --minify --format=iife --outfile=dist/content.js",
+    "watch": "esbuild src/content.js --bundle --format=iife --outfile=dist/content.js --watch"
   },
   "devDependencies": {
+    "esbuild": "^0.20.2",
     "puppeteer": "^22.6.0"
   }
 }

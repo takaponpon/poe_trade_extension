@@ -25,7 +25,7 @@
         "https://jp.pathofexile.com/trade2/search/poe2/*",
         "https://www.pathofexile.com/trade2/search/poe2/*"
       ],
-      "js": ["content.js"],
+      "js": ["dist/content.js"],
       "run_at": "document_end"
     },
     {

@@ -264,57 +264,29 @@
       "en": "Corsair Vest",
       "jp": "コルセアのコート"
     },
-    "hermit garb": {
-      "en": "Hermit Garb",
-      "jp": "隠修士の服"
-    },
-    "assassin garb": {
-      "en": "Assassin Garb",
-      "jp": "暗殺者の服"
-    },
-    "ascetic garb": {
-      "en": "Ascetic Garb",
-      "jp": "修道僧の服"
-    },
     "waxed jacket": {
       "en": "Waxed Jacket",
       "jp": "ワックスジャケット"
     },
     "oiled jacket": {
       "en": "Oiled Jacket",
-      "jp": "オイルジャケット"
+      "jp": "暗殺者の服"
     },
     "sleek jacket": {
       "en": "Sleek Jacket",
-      "jp": "艶のあるジャケット"
-    },
-    "marabout garb": {
-      "en": "Marabout Garb",
-      "jp": "マラブーの服"
-    },
-    "evangelist garb": {
-      "en": "Evangelist Garb",
-      "jp": "伝道者の服"
+      "jp": "修道僧の服"
     },
     "wayfarer jacket": {
       "en": "Wayfarer Jacket",
-      "jp": "旅人のジャケット"
+      "jp": "ワックスジャケット"
     },
     "itinerant jacket": {
       "en": "Itinerant Jacket",
-      "jp": "旅回りのジャケット"
+      "jp": "オイルジャケット"
     },
     "rambler jacket": {
       "en": "Rambler Jacket",
-      "jp": "散策者のジャケット"
-    },
-    "anchorite garb": {
-      "en": "Anchorite Garb",
-      "jp": "隠者の服"
-    },
-    "hatungo garb": {
-      "en": "Hatungo Garb",
-      "jp": "ハトゥンゴの服"
+      "jp": "艶のあるジャケット"
     },
     "scalpers jacket": {
       "en": "Scalper's Jacket",
@@ -322,19 +294,15 @@
     },
     "hawkers jacket": {
       "en": "Hawker's Jacket",
-      "jp": "鷹使いのジャケット"
+      "jp": "伝道者の服"
     },
     "falconers jacket": {
       "en": "Falconer's Jacket",
-      "jp": "鷹匠のジャケット"
+      "jp": "旅人のジャケット"
     },
     "scoundrel jacket": {
       "en": "Scoundrel Jacket",
-      "jp": "悪人のジャケット"
-    },
-    "austere garb": {
-      "en": "Austere Garb",
-      "jp": "禁欲者の服"
+      "jp": "旅回りのジャケット"
     },
     "tattered robe": {
       "en": "Tattered Robe",
@@ -342,11 +310,11 @@
     },
     "mystic raiment": {
       "en": "Mystic Raiment",
-      "jp": "ボロボロのローブ"
+      "jp": "隠者の服"
     },
     "feathered raiment": {
       "en": "Feathered Raiment",
-      "jp": "神秘の装束"
+      "jp": "ハトゥンゴの服"
     },
     "plated raiment": {
       "en": "Plated Raiment",
@@ -366,19 +334,19 @@
     },
     "avian robe": {
       "en": "Avian Robe",
-      "jp": "羽根付きのローブ"
+      "jp": "禁欲者の服"
     },
     "hexers robe": {
       "en": "Hexer's Robe",
-      "jp": "呪術師のローブ"
+      "jp": "王者の胴鎧"
     },
     "cursespeakers robe": {
       "en": "Cursespeaker's Robe",
-      "jp": "呪術師のローブ"
+      "jp": "ボロボロのローブ"
     },
     "vile robe": {
       "en": "Vile Robe",
-      "jp": "呪言のローブ"
+      "jp": "神秘の装束"
     },
     "bone raiment": {
       "en": "Bone Raiment",
@@ -390,7 +358,7 @@
     },
     "luxurious robe": {
       "en": "Luxurious Robe",
-      "jp": "絹のローブ"
+      "jp": "惨事の装束"
     },
     "keth raiment": {
       "en": "Keth Raiment",
@@ -398,31 +366,31 @@
     },
     "river raiment": {
       "en": "River Raiment",
-      "jp": "ケスの装束"
+      "jp": "羽根付きのローブ"
     },
     "flowing raiment": {
       "en": "Flowing Raiment",
-      "jp": "川の装束"
+      "jp": "鳥のローブ"
     },
     "votive raiment": {
       "en": "Votive Raiment",
-      "jp": "奉献の装束"
+      "jp": "呪術師のローブ"
     },
     "adherents raiment": {
       "en": "Adherent's Raiment",
-      "jp": "奉献の装束"
+      "jp": "呪言のローブ"
     },
     "altar robe": {
       "en": "Altar Robe",
-      "jp": "祭壇のローブ"
+      "jp": "悪辣のローブ"
     },
     "ceremonial robe": {
       "en": "Ceremonial Robe",
-      "jp": "祭壇のローブ"
+      "jp": "骨の装束"
     },
     "sacramental robe": {
       "en": "Sacramental Robe",
-      "jp": "儀式のローブ"
+      "jp": "絹のローブ"
     },
     "elementalist robe": {
       "en": "Elementalist Robe",
@@ -434,15 +402,15 @@
     },
     "chieftain cuirass": {
       "en": "Chieftain Cuirass",
-      "jp": "錆びた胴鎧"
+      "jp": "川の装束"
     },
     "warlord cuirass": {
       "en": "Warlord Cuirass",
-      "jp": "族長の胴鎧"
+      "jp": "緩やかな装束"
     },
     "champion cuirass": {
       "en": "Champion Cuirass",
-      "jp": "王者の胴鎧"
+      "jp": "英雄の鎧"
     },
     "conqueror plate": {
       "en": "Conqueror Plate",
@@ -454,7 +422,7 @@
     },
     "barbarian plate": {
       "en": "Barbarian Plate",
-      "jp": "毛皮のプレート"
+      "jp": "儀式のローブ"
     },
     "iron cuirass": {
       "en": "Iron Cuirass",
@@ -462,11 +430,11 @@
     },
     "rugged cuirass": {
       "en": "Rugged Cuirass",
-      "jp": "鉄の胴鎧"
+      "jp": "エレメンタリストのローブ"
     },
     "soldier cuirass": {
       "en": "Soldier Cuirass",
-      "jp": "無骨な胴鎧"
+      "jp": "錆びた胴鎧"
     },
     "raider plate": {
       "en": "Raider Plate",
@@ -478,19 +446,19 @@
     },
     "sandsworn cuirass": {
       "en": "Sandsworn Cuirass",
-      "jp": "マラケスの胴鎧"
+      "jp": "王者の胴鎧"
     },
     "steel plate": {
       "en": "Steel Plate",
-      "jp": "ラップサンダル"
+      "jp": "鋼鉄のプレート"
     },
     "elegant plate": {
       "en": "Elegant Plate",
-      "jp": "鋼鉄のプレート"
+      "jp": "毛皮のプレート"
     },
     "ornate plate": {
       "en": "Ornate Plate",
-      "jp": "エレガントプレート"
+      "jp": "蛮族のプレート"
     },
     "full plate": {
       "en": "Full Plate",
@@ -498,7 +466,7 @@
     },
     "heavy plate": {
       "en": "Heavy Plate",
-      "jp": "フルプレート"
+      "jp": "無骨な胴鎧"
     },
     "vaal cuirass": {
       "en": "Vaal Cuirass",
@@ -506,15 +474,15 @@
     },
     "stone cuirass": {
       "en": "Stone Cuirass",
-      "jp": "ヴァールの胴鎧"
+      "jp": "レイダープレート"
     },
     "utzaal cuirass": {
       "en": "Utzaal Cuirass",
-      "jp": "石の胴鎧"
+      "jp": "マラケスの胴鎧"
     },
     "juggernaut plate": {
       "en": "Juggernaut Plate",
-      "jp": "ウトザールの胴鎧"
+      "jp": "砂漠の民の胴鎧"
     },
     "chain mail": {
       "en": "Chain Mail",
@@ -522,23 +490,23 @@
     },
     "heroic armour": {
       "en": "Heroic Armour",
-      "jp": "英雄の鎧"
+      "jp": "旅人のジャケット"
     },
     "ring mail": {
       "en": "Ring Mail",
-      "jp": "英雄の鎧"
+      "jp": "華美なプレート"
     },
     "rogue armour": {
       "en": "Rogue Armour",
-      "jp": "ローグアーマー"
+      "jp": "コルセアの帽子"
     },
     "scoundrel armour": {
       "en": "Scoundrel Armour",
-      "jp": "ローグアーマー"
+      "jp": "ヘビープレート"
     },
     "dastard armour": {
       "en": "Dastard Armour",
-      "jp": "悪党の鎧"
+      "jp": "ヴァールの胴鎧"
     },
     "vagabond armour": {
       "en": "Vagabond Armour",
@@ -546,7 +514,7 @@
     },
     "wanderer armour": {
       "en": "Wanderer Armour",
-      "jp": "放浪者の鎧"
+      "jp": "ウトザールの胴鎧"
     },
     "cloaked mail": {
       "en": "Cloaked Mail",
@@ -554,11 +522,11 @@
     },
     "shrouded mail": {
       "en": "Shrouded Mail",
-      "jp": "クロークメイル"
+      "jp": "チェインメイル"
     },
     "mantled mail": {
       "en": "Mantled Mail",
-      "jp": "シュラウドメイル"
+      "jp": "英雄の鎧"
     },
     "explorer armour": {
       "en": "Explorer Armour",
@@ -566,7 +534,7 @@
     },
     "trailblazer armour": {
       "en": "Trailblazer Armour",
-      "jp": "探検家の鎧"
+      "jp": "ローグアーマー"
     },
     "scale mail": {
       "en": "Scale Mail",
@@ -574,11 +542,11 @@
     },
     "golden mail": {
       "en": "Golden Mail",
-      "jp": "スケイルメイル"
+      "jp": "卑怯者の鎧"
     },
     "death mail": {
       "en": "Death Mail",
-      "jp": "ゴールデンメイル"
+      "jp": "放浪者の鎧"
     },
     "knight armour": {
       "en": "Knight Armour",
@@ -590,7 +558,7 @@
     },
     "thane mail": {
       "en": "Thane Mail",
-      "jp": "先祖のメイル"
+      "jp": "シュラウドメイル"
     },
     "lamellar mail": {
       "en": "Lamellar Mail",
@@ -618,19 +586,19 @@
     },
     "templar vestments": {
       "en": "Templar Vestments",
-      "jp": "鴉の外套"
+      "jp": "騎士の鎧"
     },
     "pelt mantle": {
       "en": "Pelt Mantle",
-      "jp": "テンプラーの祭服"
+      "jp": "先祖のメイル"
     },
     "bearskin mantle": {
       "en": "Bearskin Mantle",
-      "jp": "生皮の外套"
+      "jp": "族長のメイル"
     },
     "wolfskin mantle": {
       "en": "Wolfskin Mantle",
-      "jp": "熊皮の外套"
+      "jp": "層状のメイル"
     },
     "mail vestments": {
       "en": "Mail Vestments",
@@ -638,7 +606,7 @@
     },
     "chain vestments": {
       "en": "Chain Vestments",
-      "jp": "鎖帷子の祭服"
+      "jp": "生贄のレガリア"
     },
     "shaman mantle": {
       "en": "Shaman Mantle",
@@ -646,19 +614,19 @@
     },
     "occultist mantle": {
       "en": "Occultist Mantle",
-      "jp": "シャーマンの外套"
+      "jp": "巡礼者の祭服"
     },
     "conjurer mantle": {
       "en": "Conjurer Mantle",
-      "jp": "オカルティストの外套"
+      "jp": "鴉の外套"
     },
     "ironclad vestments": {
       "en": "Ironclad Vestments",
-      "jp": "堅牢なレギンス"
+      "jp": "甲鉄の祭服"
     },
     "plated vestments": {
       "en": "Plated Vestments",
-      "jp": "甲鉄の祭服"
+      "jp": "装甲付きの祭服"
     },
     "sacrificial mantle": {
       "en": "Sacrificial Mantle",
@@ -666,11 +634,11 @@
     },
     "heartcarver mantle": {
       "en": "Heartcarver Mantle",
-      "jp": "生贄の外套"
+      "jp": "狼皮の外套"
     },
     "death mantle": {
       "en": "Death Mantle",
-      "jp": "ハートカーヴァーの外套"
+      "jp": "鎖帷子の祭服"
     },
     "cleric vestments": {
       "en": "Cleric Vestments",
@@ -678,11 +646,11 @@
     },
     "tideseer mantle": {
       "en": "Tideseer Mantle",
-      "jp": "聖職者の祭服"
+      "jp": "潮読みの外套"
     },
     "seastorm mantle": {
       "en": "Seastorm Mantle",
-      "jp": "潮読みの外套"
+      "jp": "オカルティストの外套"
     },
     "gilded vestments": {
       "en": "Gilded Vestments",
@@ -690,7 +658,7 @@
     },
     "rawhide boots": {
       "en": "Rawhide Boots",
-      "jp": "煌びやかな祭服"
+      "jp": "生皮のブーツ"
     },
     "laced boots": {
       "en": "Laced Boots",
@@ -698,7 +666,7 @@
     },
     "bound boots": {
       "en": "Bound Boots",
-      "jp": "レースのブーツ"
+      "jp": "縛られたブーツ"
     },
     "cinched boots": {
       "en": "Cinched Boots",
@@ -710,7 +678,7 @@
     },
     "sleek boots": {
       "en": "Sleek Boots",
-      "jp": "エンボスのブーツ"
+      "jp": "艶のあるブーツ"
     },
     "steeltoe boots": {
       "en": "Steeltoe Boots",
@@ -718,11 +686,11 @@
     },
     "studded boots": {
       "en": "Studded Boots",
-      "jp": "スチールトーブーツ"
+      "jp": "鋲付きのブーツ"
     },
     "cavalry boots": {
       "en": "Cavalry Boots",
-      "jp": "鋲付きのブーツ"
+      "jp": "騎兵隊のブーツ"
     },
     "lizardscale boots": {
       "en": "Lizardscale Boots",
@@ -730,31 +698,31 @@
     },
     "serpentscale boots": {
       "en": "Serpentscale Boots",
-      "jp": "リザードスケールブーツ"
+      "jp": "蛇皮のブーツ"
     },
     "dragonscale boots": {
       "en": "Dragonscale Boots",
-      "jp": "蛇皮のブーツ"
+      "jp": "竜鱗のブーツ"
     },
     "flared boots": {
       "en": "Flared Boots",
-      "jp": "竜鱗のブーツ"
+      "jp": "フレアブーツ"
     },
     "drakeskin boots": {
       "en": "Drakeskin Boots",
-      "jp": "フレアブーツ"
+      "jp": "ドレイクスキンブーツ"
     },
     "frayed shoes": {
       "en": "Frayed Shoes",
-      "jp": "ドレイクスキンブーツ"
+      "jp": "擦り切れた靴"
     },
     "wayfarer shoes": {
       "en": "Wayfarer Shoes",
-      "jp": "擦り切れた靴"
+      "jp": "旅人の靴"
     },
     "wanderer shoes": {
       "en": "Wanderer Shoes",
-      "jp": "旅人の靴"
+      "jp": "風来坊の靴"
     },
     "threaded shoes": {
       "en": "Threaded Shoes",
@@ -762,11 +730,11 @@
     },
     "silverbuckled shoes": {
       "en": "Silverbuckled Shoes",
-      "jp": "スレッドシューズ"
+      "jp": "銀のバックルのシューズ"
     },
     "charmed shoes": {
       "en": "Charmed Shoes",
-      "jp": "銀のバックルのシューズ"
+      "jp": "チャームドシューズ"
     },
     "hunting shoes": {
       "en": "Hunting Shoes",
@@ -774,19 +742,19 @@
     },
     "treerunner shoes": {
       "en": "Treerunner Shoes",
-      "jp": "ハンティングシューズ"
+      "jp": "ツリーランナーシューズ"
     },
     "quickslip shoes": {
       "en": "Quickslip Shoes",
-      "jp": "ツリーランナーシューズ"
+      "jp": "クイックステップシューズ"
     },
     "steelpoint shoes": {
       "en": "Steelpoint Shoes",
-      "jp": "クイックステップシューズ"
+      "jp": "スチールポイントシューズ"
     },
     "daggerfoot shoes": {
       "en": "Daggerfoot Shoes",
-      "jp": "スチールポイントシューズ"
+      "jp": "ダガーフットシューズ"
     },
     "velour shoes": {
       "en": "Velour Shoes",
@@ -798,15 +766,15 @@
     },
     "wrapped sandals": {
       "en": "Wrapped Sandals",
-      "jp": "潮読みの外套"
+      "jp": "ラップサンダル"
     },
     "laced sandals": {
       "en": "Laced Sandals",
-      "jp": "ラップサンダル"
+      "jp": "レースのサンダル"
     },
     "bound sandals": {
       "en": "Bound Sandals",
-      "jp": "レースのサンダル"
+      "jp": "縛られたサンダル"
     },
     "lattice sandals": {
       "en": "Lattice Sandals",
@@ -814,7 +782,7 @@
     },
     "bangled sandals": {
       "en": "Bangled Sandals",
-      "jp": "ラティスサンダル"
+      "jp": "バングルサンダル"
     },
     "silk slippers": {
       "en": "Silk Slippers",
@@ -822,11 +790,11 @@
     },
     "elegant slippers": {
       "en": "Elegant Slippers",
-      "jp": "シルクの履物"
+      "jp": "高雅な履物"
     },
     "luxurious slippers": {
       "en": "Luxurious Slippers",
-      "jp": "高雅な履物"
+      "jp": "豪華な履物"
     },
     "feathered sandals": {
       "en": "Feathered Sandals",
@@ -834,19 +802,19 @@
     },
     "dunerunner sandals": {
       "en": "Dunerunner Sandals",
-      "jp": "羽根付きのサンダル"
+      "jp": "デューンランナーサンダル"
     },
     "sandsworn sandals": {
       "en": "Sandsworn Sandals",
-      "jp": "デューンランナーサンダル"
+      "jp": "砂漠の民のサンダル"
     },
     "flax sandals": {
       "en": "Flax Sandals",
-      "jp": "砂漠の民のサンダル"
+      "jp": "麻のサンダル"
     },
     "sekhema sandals": {
       "en": "Sekhema Sandals",
-      "jp": "��麻のサンダル"
+      "jp": "セケマのサンダル"
     },
     "rough greaves": {
       "en": "Rough Greaves",
@@ -858,11 +826,11 @@
     },
     "plated greaves": {
       "en": "Plated Greaves",
-      "jp": "鉄のグリーヴ"
+      "jp": "プレートグリーヴ"
     },
     "bulwark greaves": {
       "en": "Bulwark Greaves",
-      "jp": "プレートグリーヴ"
+      "jp": "砦のグリーヴ"
     },
     "bronze greaves": {
       "en": "Bronze Greaves",
@@ -870,7 +838,7 @@
     },
     "lionheart greaves": {
       "en": "Lionheart Greaves",
-      "jp": "青銅のグリーヴ"
+      "jp": "ライオンハートグリーヴ"
     },
     "trimmed greaves": {
       "en": "Trimmed Greaves",
@@ -878,11 +846,11 @@
     },
     "elegant greaves": {
       "en": "Elegant Greaves",
-      "jp": "整ったグリーヴ"
+      "jp": "エレガントグリーヴ"
     },
     "ornate greaves": {
       "en": "Ornate Greaves",
-      "jp": "エレガントグリーヴ"
+      "jp": "華美なグリーヴ"
     },
     "stone greaves": {
       "en": "Stone Greaves",
@@ -890,19 +858,19 @@
     },
     "carved greaves": {
       "en": "Carved Greaves",
-      "jp": "石のグリーヴ"
+      "jp": "彫刻のあるグリーヴ"
     },
     "vaal greaves": {
       "en": "Vaal Greaves",
-      "jp": "彫刻のあるグリーヴ"
+      "jp": "ヴァールのグリーヴ"
     },
     "reefsteel greaves": {
       "en": "Reefsteel Greaves",
-      "jp": "ヴァールのグリーヴ"
+      "jp": "リーフスチールグリーヴ"
     },
     "tasalian greaves": {
       "en": "Tasalian Greaves",
-      "jp": "リーフスチールグリーヴ"
+      "jp": "タサリオのグリーヴ"
     },
     "mail sabatons": {
       "en": "Mail Sabatons",
@@ -910,11 +878,11 @@
     },
     "soldiering sabatons": {
       "en": "Soldiering Sabatons",
-      "jp": "メイルサバトン"
+      "jp": "軍人のサバトン"
     },
     "veteran sabatons": {
       "en": "Veteran Sabatons",
-      "jp": "軍人のサバトン"
+      "jp": "老兵のサバトン"
     },
     "braced sabatons": {
       "en": "Braced Sabatons",
@@ -922,11 +890,11 @@
     },
     "goldwork sabatons": {
       "en": "Goldwork Sabatons",
-      "jp": "ブレースサバトン"
+      "jp": "金細工のサバトン"
     },
     "noble sabatons": {
       "en": "Noble Sabatons",
-      "jp": "金細工のサバトン"
+      "jp": "貴族のサバトン"
     },
     "stacked sabatons": {
       "en": "Stacked Sabatons",
@@ -934,11 +902,11 @@
     },
     "bastion sabatons": {
       "en": "Bastion Sabatons",
-      "jp": "多層サバトン"
+      "jp": "稜堡のサバトン"
     },
     "fortress sabatons": {
       "en": "Fortress Sabatons",
-      "jp": "稜堡のサバトン"
+      "jp": "要塞のサバトン"
     },
     "covered sabatons": {
       "en": "Covered Sabatons",
@@ -946,7 +914,7 @@
     },
     "blacksteel sabatons": {
       "en": "Blacksteel Sabatons",
-      "jp": "カバードサバトン"
+      "jp": "ブラックスティールサバトン"
     },
     "grand cuisses": {
       "en": "Grand Cuisses",
@@ -954,47 +922,47 @@
     },
     "padded leggings": {
       "en": "Padded Leggings",
-      "jp": "荘厳な腿当て"
+      "jp": "パッド入りのレギンス"
     },
     "adherent leggings": {
       "en": "Adherent Leggings",
-      "jp": "パッド入りのレギンス"
+      "jp": "付着するレギンス"
     },
     "faithful leggings": {
       "en": "Faithful Leggings",
-      "jp": "付着するレギンス"
+      "jp": "忠義者のレギンス"
     },
     "secured leggings": {
       "en": "Secured Leggings",
-      "jp": "鋼鉄のプレート"
+      "jp": "堅牢なレギンス"
     },
     "bound leggings": {
       "en": "Bound Leggings",
-      "jp": "堅牢なレギンス"
+      "jp": "縛られたレギンス"
     },
     "apostle leggings": {
       "en": "Apostle Leggings",
-      "jp": "縛られたレギンス"
+      "jp": "使徒のレギンス"
     },
     "pelt leggings": {
       "en": "Pelt Leggings",
-      "jp": "使徒のレギンス"
+      "jp": "生皮のレギンス"
     },
     "shamanistic leggings": {
       "en": "Shamanistic Leggings",
-      "jp": "生皮のレギンス"
+      "jp": "シャーマニズムのレギンス"
     },
     "warlock leggings": {
       "en": "Warlock Leggings",
-      "jp": "シャーマニズムのレギンス"
+      "jp": "ウォーロックレギンス"
     },
     "weaver leggings": {
       "en": "Weaver Leggings",
-      "jp": "ウォーロックレギンス"
+      "jp": "編み込みのレギンス"
     },
     "cryptic leggings": {
       "en": "Cryptic Leggings",
-      "jp": "編み込みのレギンス"
+      "jp": "謎のレギンス"
     },
     "twig focus": {
       "en": "Twig Focus",
@@ -1002,11 +970,11 @@
     },
     "whorl focus": {
       "en": "Whorl Focus",
-      "jp": "小枝のフォーカス"
+      "jp": "渦巻のフォーカス"
     },
     "tasalian focus": {
       "en": "Tasalian Focus",
-      "jp": "渦巻のフォーカス"
+      "jp": "タサリオのフォーカス"
     },
     "woven focus": {
       "en": "Woven Focus",
@@ -1014,7 +982,7 @@
     },
     "wreath focus": {
       "en": "Wreath Focus",
-      "jp": "編み物のフォーカス"
+      "jp": "枝角のフォーカス"
     },
     "antler focus": {
       "en": "Antler Focus",
@@ -1022,11 +990,11 @@
     },
     "staghorn focus": {
       "en": "Staghorn Focus",
-      "jp": "枝角のフォーカス"
+      "jp": "ドルイドのフォーカス"
     },
     "druidic focus": {
       "en": "Druidic Focus",
-      "jp": "鹿角のフォーカス"
+      "jp": "彫り込まれたフォーカス"
     },
     "engraved focus": {
       "en": "Engraved Focus",
@@ -1038,7 +1006,7 @@
     },
     "jingling focus": {
       "en": "Jingling Focus",
-      "jp": "調性のフォーカス"
+      "jp": "結晶のフォーカス"
     },
     "crystal focus": {
       "en": "Crystal Focus",
@@ -1046,11 +1014,11 @@
     },
     "arrayed focus": {
       "en": "Arrayed Focus",
-      "jp": "結晶のフォーカス"
+      "jp": "レイラインフォーカス"
     },
     "leyline focus": {
       "en": "Leyline Focus",
-      "jp": "整列のフォーカス"
+      "jp": "ブードゥーフォーカス"
     },
     "voodoo focus": {
       "en": "Voodoo Focus",
@@ -1058,22 +1026,18 @@
     },
     "cultist focus": {
       "en": "Cultist Focus",
-      "jp": "ブードゥーフォーカス"
+      "jp": "羽飾りのフォーカス"
     },
     "plumed focus": {
       "en": "Plumed Focus",
-      "jp": "崇拝者のフォーカス"
+      "jp": "神聖なフォーカス"
     },
     "hallowed focus": {
       "en": "Hallowed Focus",
-      "jp": "羽飾りのフォーカス"
+      "jp": "聖なるフォーカス"
     },
     "sacred focus": {
       "en": "Sacred Focus",
-      "jp": "聖なるフォーカス"
-    },
-    "runed focus": {
-      "en": "Runed Focus",
       "jp": "聖なるフォーカス"
     },
     "suede bracers": {
@@ -1086,19 +1050,19 @@
     },
     "hunting bracers": {
       "en": "Hunting Bracers",
-      "jp": "頑丈な弓籠手"
+      "jp": "狩りの弓籠手"
     },
     "stalking bracers": {
       "en": "Stalking Bracers",
-      "jp": "狩りの弓籠手"
+      "jp": "追跡者の弓籠手"
     },
     "bound bracers": {
       "en": "Bound Bracers",
-      "jp": "追跡者の弓籠手"
+      "jp": "固定式の弓籠手"
     },
     "swift bracers": {
       "en": "Swift Bracers",
-      "jp": "固定式の弓籠手"
+      "jp": "アマツバメの弓籠手"
     },
     "sectioned bracers": {
       "en": "Sectioned Bracers",
@@ -1106,11 +1070,11 @@
     },
     "refined bracers": {
       "en": "Refined Bracers",
-      "jp": "分割式の弓籠手"
+      "jp": "洗練された弓籠手"
     },
     "grand bracers": {
       "en": "Grand Bracers",
-      "jp": "洗練された弓籠手"
+      "jp": "荘厳な弓籠手"
     },
     "spined bracers": {
       "en": "Spined Bracers",
@@ -1118,11 +1082,11 @@
     },
     "spiked bracers": {
       "en": "Spiked Bracers",
-      "jp": "針付きの弓籠手"
+      "jp": "スパイク付きの弓籠手"
     },
     "barbed bracers": {
       "en": "Barbed Bracers",
-      "jp": "スパイク付きの弓籠手"
+      "jp": "トゲ付きの弓籠手"
     },
     "fine bracers": {
       "en": "Fine Bracers",
@@ -1130,7 +1094,7 @@
     },
     "polished bracers": {
       "en": "Polished Bracers",
-      "jp": "上質な弓籠手"
+      "jp": "磨かれた弓籠手"
     },
     "gauze wraps": {
       "en": "Gauze Wraps",
@@ -1138,11 +1102,11 @@
     },
     "bandage wraps": {
       "en": "Bandage Wraps",
-      "jp": "金網のラップ"
+      "jp": "バンテージラップ"
     },
     "war wraps": {
       "en": "War Wraps",
-      "jp": "バンテージラップ"
+      "jp": "ウォーラップ"
     },
     "linen wraps": {
       "en": "Linen Wraps",
@@ -1150,11 +1114,11 @@
     },
     "cambric wraps": {
       "en": "Cambric Wraps",
-      "jp": "リネ���のラップ"
+      "jp": "キャンブリックのラップ"
     },
     "elegant wraps": {
       "en": "Elegant Wraps",
-      "jp": "キャンブリックのラップ"
+      "jp": "エレガントラップ"
     },
     "spiral wraps": {
       "en": "Spiral Wraps",
@@ -1162,19 +1126,19 @@
     },
     "adorned wraps": {
       "en": "Adorned Wraps",
-      "jp": "スパイラルラップ"
+      "jp": "装飾のあるラップ"
     },
     "vaal wraps": {
       "en": "Vaal Wraps",
-      "jp": "装飾のあるラップ"
+      "jp": "ヴァールのラップ"
     },
     "buckled wraps": {
       "en": "Buckled Wraps",
-      "jp": "ヴァールのラップ"
+      "jp": "バックル付きのラップ"
     },
     "secured wraps": {
       "en": "Secured Wraps",
-      "jp": "バックル付きのラップ"
+      "jp": "固定されたラップ"
     },
     "furtive wraps": {
       "en": "Furtive Wraps",
@@ -1194,11 +1158,11 @@
     },
     "ominous gloves": {
       "en": "Ominous Gloves",
-      "jp": "地味な手袋"
+      "jp": "不気味な手袋"
     },
     "grim gloves": {
       "en": "Grim Gloves",
-      "jp": "不気味な手袋"
+      "jp": "縫い合わされた手袋"
     },
     "stitched gloves": {
       "en": "Stitched Gloves",
@@ -1206,7 +1170,7 @@
     },
     "embellished gloves": {
       "en": "Embellished Gloves",
-      "jp": "装飾付き手袋"
+      "jp": "宝石をあしらった手袋"
     },
     "jewelled gloves": {
       "en": "Jewelled Gloves",
@@ -1214,11 +1178,11 @@
     },
     "baroque gloves": {
       "en": "Baroque Gloves",
-      "jp": "バロックの手袋"
+      "jp": "絢爛な手袋"
     },
     "opulent gloves": {
       "en": "Opulent Gloves",
-      "jp": "絢爛な手袋"
+      "jp": "手の込んだ手袋"
     },
     "intricate gloves": {
       "en": "Intricate Gloves",
@@ -1226,11 +1190,11 @@
     },
     "gold gloves": {
       "en": "Gold Gloves",
-      "jp": "金の手袋"
+      "jp": "ヴァールの手袋"
     },
     "vaal gloves": {
       "en": "Vaal Gloves",
-      "jp": "ヴァールの手袋"
+      "jp": "パウアスケール手袋"
     },
     "pauascale gloves": {
       "en": "Pauascale Gloves",
@@ -1238,7 +1202,7 @@
     },
     "sirenscale gloves": {
       "en": "Sirenscale Gloves",
-      "jp": "サイレーンスケイルの手袋"
+      "jp": "刺繍入りの手袋"
     },
     "embroidered gloves": {
       "en": "Embroidered Gloves",
@@ -1246,7 +1210,7 @@
     },
     "stocky mitts": {
       "en": "Stocky Mitts",
-      "jp": "丈夫なミット"
+      "jp": "リベット付きミット"
     },
     "riveted mitts": {
       "en": "Riveted Mitts",
@@ -1254,11 +1218,11 @@
     },
     "plated mitts": {
       "en": "Plated Mitts",
-      "jp": "プレートミット"
+      "jp": "騎士のミット"
     },
     "knightly mitts": {
       "en": "Knightly Mitts",
-      "jp": "騎士のミット"
+      "jp": "強化ミット"
     },
     "tempered mitts": {
       "en": "Tempered Mitts",
@@ -1266,7 +1230,7 @@
     },
     "elegant mitts": {
       "en": "Elegant Mitts",
-      "jp": "エレガントミット"
+      "jp": "補強ミット"
     },
     "bolstered mitts": {
       "en": "Bolstered Mitts",
@@ -1274,11 +1238,11 @@
     },
     "ancient mitts": {
       "en": "Ancient Mitts",
-      "jp": "古代のミット"
+      "jp": "華美なミット"
     },
     "ornate mitts": {
       "en": "Ornate Mitts",
-      "jp": "華美なミット"
+      "jp": "成形ミット"
     },
     "moulded mitts": {
       "en": "Moulded Mitts",
@@ -1286,19 +1250,19 @@
     },
     "feathered mitts": {
       "en": "Feathered Mitts",
-      "jp": "羽根付きのミット"
+      "jp": "ヴァールのミット"
     },
     "vaal mitts": {
       "en": "Vaal Mitts",
-      "jp": "ヴァールのミット"
+      "jp": "緻密なミット"
     },
     "detailed mitts": {
       "en": "Detailed Mitts",
-      "jp": "緻密なミット"
+      "jp": "巨大なミット"
     },
     "massive mitts": {
       "en": "Massive Mitts",
-      "jp": "巨大なミット"
+      "jp": "タイタンのミット"
     },
     "titan mitts": {
       "en": "Titan Mitts",
@@ -1310,11 +1274,11 @@
     },
     "ironmail gauntlets": {
       "en": "Ironmail Gauntlets",
-      "jp": "ア��アンメイルガントレット"
+      "jp": "スチールメイルガントレット"
     },
     "steelmail gauntlets": {
       "en": "Steelmail Gauntlets",
-      "jp": "スチールメイルガントレット"
+      "jp": "レイヤーガントレット"
     },
     "layered gauntlets": {
       "en": "Layered Gauntlets",
@@ -1322,11 +1286,11 @@
     },
     "captain gauntlets": {
       "en": "Captain Gauntlets",
-      "jp": "部隊長のガントレット"
+      "jp": "コマンダーガントレット"
     },
     "commander gauntlets": {
       "en": "Commander Gauntlets",
-      "jp": "コマンダーガントレット"
+      "jp": "二重のガントレット"
     },
     "doubled gauntlets": {
       "en": "Doubled Gauntlets",
@@ -1334,11 +1298,11 @@
     },
     "zealot gauntlets": {
       "en": "Zealot Gauntlets",
-      "jp": "狂信者のガントレット"
+      "jp": "崇拝者のガントレット"
     },
     "cultist gauntlets": {
       "en": "Cultist Gauntlets",
-      "jp": "崇拝者のガントレット"
+      "jp": "プレートガントレット"
     },
     "plate gauntlets": {
       "en": "Plate Gauntlets",
@@ -1346,7 +1310,7 @@
     },
     "blacksteel gauntlets": {
       "en": "Blacksteel Gauntlets",
-      "jp": "ブラックスティールガントレット"
+      "jp": "艶のあるガントレット"
     },
     "burnished gauntlets": {
       "en": "Burnished Gauntlets",
@@ -1356,21 +1320,17 @@
       "en": "Ornate Gauntlets",
       "jp": "華美なガントレット"
     },
-    "grand manchettes": {
-      "en": "Grand Manchettes",
-      "jp": "荘厳なマンシェット"
-    },
     "rope cuffs": {
       "en": "Rope Cuffs",
       "jp": "縄のカフス"
     },
     "braided cuffs": {
       "en": "Braided Cuffs",
-      "jp": "編組のカフス"
+      "jp": "縛られたカフス"
     },
     "bound cuffs": {
       "en": "Bound Cuffs",
-      "jp": "縛られたカフス"
+      "jp": "古いカフス"
     },
     "aged cuffs": {
       "en": "Aged Cuffs",
@@ -1378,11 +1338,11 @@
     },
     "heirloom cuffs": {
       "en": "Heirloom Cuffs",
-      "jp": "家宝のカフス"
+      "jp": "古代のカフス"
     },
     "ancient cuffs": {
       "en": "Ancient Cuffs",
-      "jp": "古代のカフス"
+      "jp": "ゴールドキャストカフス"
     },
     "goldcast cuffs": {
       "en": "Goldcast Cuffs",
@@ -1390,19 +1350,15 @@
     },
     "ornate cuffs": {
       "en": "Ornate Cuffs",
-      "jp": "華美なカフス"
+      "jp": "輝くカフス"
     },
     "gleaming cuffs": {
       "en": "Gleaming Cuffs",
-      "jp": "輝くカフス"
+      "jp": "ヴェリシウムのカフス"
     },
     "verisium cuffs": {
       "en": "Verisium Cuffs",
-      "jp": "ヴェリシウムの��フス"
-    },
-    "adherent cuffs": {
-      "en": "Adherent Cuffs",
-      "jp": "密着のカフス"
+      "jp": "ヴェリシウムのフス"
     },
     "golden visage": {
       "en": "Golden Visage",
@@ -1422,7 +1378,7 @@
     },
     "rotted hood": {
       "en": "Rotted Hood",
-      "jp": "劣化したフード"
+      "jp": "フェルトの帽子"
     },
     "felt cap": {
       "en": "Felt Cap",
@@ -1430,11 +1386,11 @@
     },
     "wool cap": {
       "en": "Wool Cap",
-      "jp": "ウールの帽子"
+      "jp": "織り帽子"
     },
     "woven cap": {
       "en": "Woven Cap",
-      "jp": "織り帽子"
+      "jp": "レースのフード"
     },
     "lace hood": {
       "en": "Lace Hood",
@@ -1442,19 +1398,19 @@
     },
     "narrow hood": {
       "en": "Narrow Hood",
-      "jp": "緻密なフード"
+      "jp": "スカーフ帽子"
     },
     "swathed cap": {
       "en": "Swathed Cap",
-      "jp": "スカーフ帽子"
+      "jp": "覆われた帽子"
     },
     "wrapped cap": {
       "en": "Wrapped Cap",
-      "jp": "覆われた帽子"
+      "jp": "砂漠の帽子"
     },
     "desert cap": {
       "en": "Desert Cap",
-      "jp": "砂漠の帽子"
+      "jp": "狩人のフード"
     },
     "hunter hood": {
       "en": "Hunter Hood",
@@ -1462,11 +1418,11 @@
     },
     "deerstalker hood": {
       "en": "Deerstalker Hood",
-      "jp": "鹿猟師のフード"
+      "jp": "罠師のフード"
     },
     "trapper hood": {
       "en": "Trapper Hood",
-      "jp": "罠師のフード"
+      "jp": "毒蛇の帽子"
     },
     "viper cap": {
       "en": "Viper Cap",
@@ -1474,11 +1430,11 @@
     },
     "corsair cap": {
       "en": "Corsair Cap",
-      "jp": "コルセアの帽子"
+      "jp": "デコレーションヘルム"
     },
     "freebooter cap": {
       "en": "Freebooter Cap",
-      "jp": "海賊の帽子"
+      "jp": "皮張りのフード"
     },
     "leatherbound hood": {
       "en": "Leatherbound Hood",
@@ -1494,7 +1450,7 @@
     },
     "oak mask": {
       "en": "Oak Mask",
-      "jp": "オークの仮面"
+      "jp": "山賊の仮面"
     },
     "face mask": {
       "en": "Face Mask",
@@ -1502,11 +1458,11 @@
     },
     "bandit mask": {
       "en": "Bandit Mask",
-      "jp": "山賊の仮面"
+      "jp": "フード付きの仮面"
     },
     "brigand mask": {
       "en": "Brigand Mask",
-      "jp": "盗賊の仮面"
+      "jp": "暗躍者の仮面"
     },
     "hooded mask": {
       "en": "Hooded Mask",
@@ -1514,7 +1470,7 @@
     },
     "skulking mask": {
       "en": "Skulking Mask",
-      "jp": "暗躍者の仮面"
+      "jp": "除け者の仮面"
     },
     "veiled mask": {
       "en": "Veiled Mask",
@@ -1522,11 +1478,11 @@
     },
     "pariah mask": {
       "en": "Pariah Mask",
-      "jp": "除け者の仮面"
+      "jp": "部族の仮面"
     },
     "faridun mask": {
       "en": "Faridun Mask",
-      "jp": "ファリドゥンの仮面"
+      "jp": "鳥の仮面"
     },
     "tribal mask": {
       "en": "Tribal Mask",
@@ -1534,11 +1490,11 @@
     },
     "avian mask": {
       "en": "Avian Mask",
-      "jp": "鳥の仮面"
+      "jp": "頑丈な仮面"
     },
     "soaring mask": {
       "en": "Soaring Mask",
-      "jp": "天翔の仮面"
+      "jp": "嘲笑の仮面"
     },
     "solid mask": {
       "en": "Solid Mask",
@@ -1546,7 +1502,7 @@
     },
     "grinning mask": {
       "en": "Grinning Mask",
-      "jp": "嘲笑の仮面"
+      "jp": "メイガスサークレット"
     },
     "death mask": {
       "en": "Death Mask",
@@ -1562,7 +1518,7 @@
     },
     "druidic circlet": {
       "en": "Druidic Circlet",
-      "jp": "ドルイドのサークレット"
+      "jp": "スカイクラウンティアラ"
     },
     "wicker tiara": {
       "en": "Wicker Tiara",
@@ -1570,11 +1526,11 @@
     },
     "avian tiara": {
       "en": "Avian Tiara",
-      "jp": "鳥のティアラ"
+      "jp": "砂漠のサークレット"
     },
     "skycrown tiara": {
       "en": "Skycrown Tiara",
-      "jp": "スカイクラウンティアラ"
+      "jp": "鎖のティアラ"
     },
     "beaded circlet": {
       "en": "Beaded Circlet",
@@ -1582,7 +1538,7 @@
     },
     "desert circlet": {
       "en": "Desert Circlet",
-      "jp": "砂漠のサークレット"
+      "jp": "術師のティアラ"
     },
     "chain tiara": {
       "en": "Chain Tiara",
@@ -1590,11 +1546,11 @@
     },
     "sandsworn tiara": {
       "en": "Sandsworn Tiara",
-      "jp": "砂漠の民のティアラ"
+      "jp": "ジャングルティアラ"
     },
     "sorcerous tiara": {
       "en": "Sorcerous Tiara",
-      "jp": "術師のティアラ"
+      "jp": "カマサのティアラ"
     },
     "feathered tiara": {
       "en": "Feathered Tiara",
@@ -1602,11 +1558,11 @@
     },
     "jungle tiara": {
       "en": "Jungle Tiara",
-      "jp": "ジャングルティアラ"
+      "jp": "ヴァーミルサークレット"
     },
     "kamasan tiara": {
       "en": "Kamasan Tiara",
-      "jp": "カマサのティアラ"
+      "jp": "翡翠のティアラ"
     },
     "gold circlet": {
       "en": "Gold Circlet",
@@ -1622,7 +1578,7 @@
     },
     "ancestral tiara": {
       "en": "Ancestral Tiara",
-      "jp": "先祖のティアラ"
+      "jp": "兵士のグレートヘルム"
     },
     "rusted greathelm": {
       "en": "Rusted Greathelm",
@@ -1630,7 +1586,7 @@
     },
     "corroded greathelm": {
       "en": "Corroded Greathelm",
-      "jp": "腐食したグレートヘルム"
+      "jp": "戦争屋のグレートヘルム"
     },
     "soldier greathelm": {
       "en": "Soldier Greathelm",
@@ -1638,11 +1594,11 @@
     },
     "mercenary greathelm": {
       "en": "Mercenary Greathelm",
-      "jp": "傭兵のグレートヘルム"
+      "jp": "ホームガードのグレートヘルム"
     },
     "warmonger greathelm": {
       "en": "Warmonger Greathelm",
-      "jp": "戦争屋のグレートヘルム"
+      "jp": "尖ったグレートヘルム"
     },
     "wrapped greathelm": {
       "en": "Wrapped Greathelm",
@@ -1650,7 +1606,7 @@
     },
     "homeguard greathelm": {
       "en": "Homeguard Greathelm",
-      "jp": "ホームガードのグレートヘルム"
+      "jp": "仮面のグレートヘルム"
     },
     "spired greathelm": {
       "en": "Spired Greathelm",
@@ -1658,11 +1614,11 @@
     },
     "elegant greathelm": {
       "en": "Elegant Greathelm",
-      "jp": "高雅なグレートヘルム"
+      "jp": "貴族のグレートヘルム"
     },
     "masked greathelm": {
       "en": "Masked Greathelm",
-      "jp": "仮面のグレートヘルム"
+      "jp": "パラゴンのグレートヘルム"
     },
     "elite greathelm": {
       "en": "Elite Greathelm",
@@ -1670,11 +1626,11 @@
     },
     "noble greathelm": {
       "en": "Noble Greathelm",
-      "jp": "貴族のグレートヘルム"
+      "jp": "指揮官のグレートヘルム"
     },
     "paragon greathelm": {
       "en": "Paragon Greathelm",
-      "jp": "パラゴンのグレートヘルム"
+      "jp": "帝国のグレートヘルム"
     },
     "warrior greathelm": {
       "en": "Warrior Greathelm",
@@ -1682,11 +1638,11 @@
     },
     "commander greathelm": {
       "en": "Commander Greathelm",
-      "jp": "指揮官のグレートヘルム"
+      "jp": "つば付き兜"
     },
     "imperial greathelm": {
       "en": "Imperial Greathelm",
-      "jp": "帝国のグレートヘルム"
+      "jp": "ドーム型の兜"
     },
     "fierce greathelm": {
       "en": "Fierce Greathelm",
@@ -1698,7 +1654,7 @@
     },
     "domed helm": {
       "en": "Domed Helm",
-      "jp": "ドーム型の兜"
+      "jp": "保護兜"
     },
     "guarded helm": {
       "en": "Guarded Helm",
@@ -1706,11 +1662,11 @@
     },
     "engraved helm": {
       "en": "Engraved Helm",
-      "jp": "彫り込まれた兜"
+      "jp": "兵士の兜"
     },
     "warded helm": {
       "en": "Warded Helm",
-      "jp": "保護兜"
+      "jp": "僧帽の兜"
     },
     "visored helm": {
       "en": "Visored Helm",
@@ -1718,7 +1674,7 @@
     },
     "soldier helm": {
       "en": "Soldier Helm",
-      "jp": "兵士の兜"
+      "jp": "隠微な兜"
     },
     "cowled helm": {
       "en": "Cowled Helm",
@@ -1726,11 +1682,11 @@
     },
     "cabalist helm": {
       "en": "Cabalist Helm",
-      "jp": "カバリストの兜"
+      "jp": "剣闘士の兜"
     },
     "cryptic helm": {
       "en": "Cryptic Helm",
-      "jp": "隠微な兜"
+      "jp": "王者の兜"
     },
     "shielded helm": {
       "en": "Shielded Helm",
@@ -1738,11 +1694,11 @@
     },
     "gladiatoral helm": {
       "en": "Gladiatoral Helm",
-      "jp": "剣闘士の兜"
+      "jp": "デコレーションヘルム"
     },
     "champion helm": {
       "en": "Champion Helm",
-      "jp": "王者の兜"
+      "jp": "荘厳な顔飾り"
     },
     "closed helm": {
       "en": "Closed Helm",
@@ -1750,11 +1706,11 @@
     },
     "gladiatorial helm": {
       "en": "Gladiatorial Helm",
-      "jp": "デコレーションヘルム"
+      "jp": "鎖の冠"
     },
     "decorated helm": {
       "en": "Decorated Helm",
-      "jp": "デコレーションヘルム"
+      "jp": "祭壇のローブ"
     },
     "grand visage": {
       "en": "Grand Visage",
@@ -1766,7 +1722,7 @@
     },
     "mailed crown": {
       "en": "Mailed Crown",
-      "jp": "角の冠"
+      "jp": "崇拝者の冠"
     },
     "horned crown": {
       "en": "Horned Crown",
@@ -1774,11 +1730,11 @@
     },
     "forest crown": {
       "en": "Forest Crown",
-      "jp": "ドルイドの冠"
+      "jp": "殉教者の冠"
     },
     "druidic crown": {
       "en": "Druidic Crown",
-      "jp": "崇拝者の冠"
+      "jp": "神聖な冠"
     },
     "cultist crown": {
       "en": "Cultist Crown",
@@ -1786,7 +1742,7 @@
     },
     "zealot crown": {
       "en": "Zealot Crown",
-      "jp": "殉教者の冠"
+      "jp": "重い冠"
     },
     "martyr crown": {
       "en": "Martyr Crown",
@@ -1794,31 +1750,15 @@
     },
     "hallowed crown": {
       "en": "Hallowed Crown",
-      "jp": "聖人の冠"
+      "jp": "神の冠"
     },
     "saintly crown": {
       "en": "Saintly Crown",
-      "jp": "重い冠"
+      "jp": "スピリットボーンの冠"
     },
     "heavy crown": {
       "en": "Heavy Crown",
       "jp": "重い冠"
-    },
-    "inquisitor crown": {
-      "en": "Inquisitor Crown",
-      "jp": "神の冠"
-    },
-    "divine crown": {
-      "en": "Divine Crown",
-      "jp": "スピリットボーンの冠"
-    },
-    "spiritbone crown": {
-      "en": "Spiritbone Crown",
-      "jp": "スピリットボーンの冠"
-    },
-    "cryptic crown": {
-      "en": "Cryptic Crown",
-      "jp": "革のバックラー"
     },
     "leather buckler": {
       "en": "Leather Buckler",
@@ -1826,7 +1766,7 @@
     },
     "pearl buckler": {
       "en": "Pearl Buckler",
-      "jp": "華美なバックラー"
+      "jp": "真珠のバックラー"
     },
     "ornate buckler": {
       "en": "Ornate Buckler",
@@ -1842,7 +1782,7 @@
     },
     "oak buckler": {
       "en": "Oak Buckler",
-      "jp": "プレートバックラー"
+      "jp": "オークのバックラー"
     },
     "plated buckler": {
       "en": "Plated Buckler",
@@ -1850,7 +1790,7 @@
     },
     "painted buckler": {
       "en": "Painted Buckler",
-      "jp": "鉄のバックラー"
+      "jp": "彩色されたバックラー"
     },
     "iron buckler": {
       "en": "Iron Buckler",
@@ -1862,7 +1802,7 @@
     },
     "coiled buckler": {
       "en": "Coiled Buckler",
-      "jp": "トゲ付きのバックラー"
+      "jp": "渦状のバックラー"
     },
     "spiked buckler": {
       "en": "Spiked Buckler",
@@ -1870,39 +1810,39 @@
     },
     "spikeward buckler": {
       "en": "Spikeward Buckler",
-      "jp": "ガットスパイクバックラー"
+      "jp": "スパイクワードバックラー"
     },
     "gutspike buckler": {
       "en": "Gutspike Buckler",
-      "jp": "リングバックラー"
+      "jp": "ガットスパイクバックラー"
     },
     "ringed buckler": {
       "en": "Ringed Buckler",
-      "jp": "鈴音のバックラー"
+      "jp": "リングバックラー"
     },
     "jingling buckler": {
       "en": "Jingling Buckler",
-      "jp": "エッジバックラー"
+      "jp": "鈴音のバックラー"
     },
     "edged buckler": {
       "en": "Edged Buckler",
-      "jp": "ブレードガードバックラー"
+      "jp": "エッジバックラー"
     },
     "bladeguard buckler": {
       "en": "Bladeguard Buckler",
-      "jp": "古代のバックラー"
+      "jp": "ブレードガードバックラー"
     },
     "ancient buckler": {
       "en": "Ancient Buckler",
-      "jp": "ラミネートバックラー"
+      "jp": "古代のバックラー"
     },
     "laminate buckler": {
       "en": "Laminate Buckler",
-      "jp": "砂漠のバックラー"
+      "jp": "ラミネートバックラー"
     },
     "desert buckler": {
       "en": "Desert Buckler",
-      "jp": "割れたタワーシールド"
+      "jp": "砂漠のバックラー"
     },
     "splintered tower shield": {
       "en": "Splintered Tower Shield",
@@ -1910,11 +1850,11 @@
     },
     "ancestor tower shield": {
       "en": "Ancestor Tower Shield",
-      "jp": "タウホアのタワーシールド"
+      "jp": "先祖のタワーシールド"
     },
     "tawhoan tower shield": {
       "en": "Tawhoan Tower Shield",
-      "jp": "黒鉄のタワーシールド"
+      "jp": "タウホアのタワーシールド"
     },
     "blacksteel tower shield": {
       "en": "Blacksteel Tower Shield",
@@ -1926,7 +1866,7 @@
     },
     "aged tower shield": {
       "en": "Aged Tower Shield",
-      "jp": "ブレースタワーシールド"
+      "jp": "古いタワーシールド"
     },
     "braced tower shield": {
       "en": "Braced Tower Shield",
@@ -1934,11 +1874,11 @@
     },
     "metalworked tower shield": {
       "en": "Metalworked Tower Shield",
-      "jp": "王家のタワーシールド"
+      "jp": "金属細工のタワーシールド"
     },
     "royal tower shield": {
       "en": "Royal Tower Shield",
-      "jp": "阻塞のタワーシールド"
+      "jp": "王家のタワーシールド"
     },
     "barricade tower shield": {
       "en": "Barricade Tower Shield",
@@ -1950,7 +1890,7 @@
     },
     "cultist tower shield": {
       "en": "Cultist Tower Shield",
-      "jp": "城壁のタワーシールド"
+      "jp": "崇拝者のタワーシールド"
     },
     "rampart tower shield": {
       "en": "Rampart Tower Shield",
@@ -1958,11 +1898,11 @@
     },
     "bulwark tower shield": {
       "en": "Bulwark Tower Shield",
-      "jp": "要塞のタワーシールド"
+      "jp": "砦のタワーシールド"
     },
     "fortress tower shield": {
       "en": "Fortress Tower Shield",
-      "jp": "紋章のタワーシールド"
+      "jp": "要塞のタワーシールド"
     },
     "heraldric tower shield": {
       "en": "Heraldric Tower Shield",
@@ -1970,7 +1910,7 @@
     },
     "noble tower shield": {
       "en": "Noble Tower Shield",
-      "jp": "石のタワーシールド"
+      "jp": "貴族のタワーシールド"
     },
     "stone tower shield": {
       "en": "Stone Tower Shield",
@@ -1978,7 +1918,7 @@
     },
     "goldworked tower shield": {
       "en": "Goldworked Tower Shield",
-      "jp": "ヴァールのタワーシールド"
+      "jp": "金細工のタワーシールド"
     },
     "vaal tower shield": {
       "en": "Vaal Tower Shield",
@@ -1994,11 +1934,11 @@
     },
     "golden targe": {
       "en": "Golden Targe",
-      "jp": "鉄木のタージ"
+      "jp": "黄金のタージ"
     },
     "ironwood targe": {
       "en": "Ironwood Targe",
-      "jp": "毛皮のタージ"
+      "jp": "鉄木のタージ"
     },
     "pelage targe": {
       "en": "Pelage Targe",
@@ -2006,19 +1946,19 @@
     },
     "fur-lined targe": {
       "en": "Fur-lined Targe",
-      "jp": "マンモスのタージ"
+      "jp": "毛裏のタージ"
     },
     "mammoth targe": {
       "en": "Mammoth Targe",
-      "jp": "鋲付きのタージ"
+      "jp": "マンモスのタージ"
     },
     "studded targe": {
       "en": "Studded Targe",
-      "jp": "傭兵のタージ"
+      "jp": "鋲付きのタージ"
     },
     "mercenary targe": {
       "en": "Mercenary Targe",
-      "jp": "三日月のタージ"
+      "jp": "傭兵のタージ"
     },
     "crescent targe": {
       "en": "Crescent Targe",
@@ -2026,39 +1966,39 @@
     },
     "polished targe": {
       "en": "Polished Targe",
-      "jp": "バロックのタージ"
+      "jp": "磨かれたタージ"
     },
     "baroque targe": {
       "en": "Baroque Targe",
-      "jp": "彫り込みのあるタージ"
+      "jp": "バロックのタージ"
     },
     "chiseled targe": {
       "en": "Chiseled Targe",
-      "jp": "石のタージ"
+      "jp": "彫り込みのあるタージ"
     },
     "stone targe": {
       "en": "Stone Targe",
-      "jp": "羽根付きのタージ"
+      "jp": "石のタージ"
     },
     "feathered targe": {
       "en": "Feathered Targe",
-      "jp": "鳥のタージ"
+      "jp": "羽根付きのタージ"
     },
     "avian targe": {
       "en": "Avian Targe",
-      "jp": "天翔のタージ"
+      "jp": "鳥のタージ"
     },
     "soaring targe": {
       "en": "Soaring Targe",
-      "jp": "重層タージ"
+      "jp": "天翔のタージ"
     },
     "stratified targe": {
       "en": "Stratified Targe",
-      "jp": "彫刻のあるタージ"
+      "jp": "重層タージ"
     },
     "carved targe": {
       "en": "Carved Targe",
-      "jp": "青銅のクレストシールド"
+      "jp": "彫刻のあるタージ"
     },
     "blazon crest shield": {
       "en": "Blazon Crest Shield",
@@ -2066,7 +2006,7 @@
     },
     "painted crest shield": {
       "en": "Painted Crest Shield",
-      "jp": "刻印のクレストシールド"
+      "jp": "彩色されたクレストシールド"
     },
     "sigil crest shield": {
       "en": "Sigil Crest Shield",
@@ -2074,7 +2014,7 @@
     },
     "engraved crest shield": {
       "en": "Engraved Crest Shield",
-      "jp": "複雑なクレストシールド"
+      "jp": "彫り込まれたクレストシールド"
     },
     "intricate crest shield": {
       "en": "Intricate Crest Shield",
@@ -2086,7 +2026,7 @@
     },
     "descry crest shield": {
       "en": "Descry Crest Shield",
-      "jp": "鈴音のクレストシールド"
+      "jp": "デスクライ・クレストシールド"
     },
     "jingling crest shield": {
       "en": "Jingling Crest Shield",
@@ -2094,6 +2034,10 @@
     },
     "dekharan crest shield": {
       "en": "Dekharan Crest Shield",
+      "jp": "デカーラ・クレストシールド"
+    },
+    "sekheman crest shield": {
+      "en": "Sekheman Crest Shield",
       "jp": "セケマのクレストシールド"
     },
     "sectarian crest shield": {
@@ -2171,6 +2115,30 @@
     "penetrating quiver": {
       "en": "Penetrating Quiver",
       "jp": "貫通の矢筒"
+    },
+    "hermit garb": {
+      "en": "Hermit Garb",
+      "jp": "隠修士の服"
+    },
+    "assassin garb": {
+      "en": "Assassin Garb",
+      "jp": "暗殺者の服"
+    },
+    "spiritbone crown": {
+      "en": "Spiritbone Crown",
+      "jp": "スピリットボーンの冠"
+    },
+    "anchorite garb": {
+      "en": "Anchorite Garb",
+      "jp": "隠者の服"
+    },
+    "marabout garb": {
+      "en": "Marabout Garb",
+      "jp": "マラブーの服"
+    },
+    "grand manchettes": {
+      "en": "Grand Manchettes",
+      "jp": "荘厳なマンシェット"
     },
     "preserved rib": {
       "en": "Preserved Rib",
@@ -3926,7 +3894,7 @@
     },
     "magma barrier": {
       "en": "Magma Barrier",
-      "jp": "��グマバリアー"
+      "jp": "グマバリアー"
     },
     "magnetic salvo": {
       "en": "Magnetic Salvo",
@@ -7522,7 +7490,7 @@
     },
     "structured hammer": {
       "en": "Structured Hammer",
-      "jp": "組み立て���ンマー"
+      "jp": "組み立てンマー"
     },
     "fortified hammer": {
       "en": "Fortified Hammer",
@@ -8712,7 +8680,7 @@
     },
     "alkem eira": {
       "en": "Alkem Eira",
-      "jp": "アルケム��エイラ"
+      "jp": "アルケムエイラ"
     },
     "alphas howl": {
       "en": "Alpha's Howl",
@@ -8908,7 +8876,7 @@
     },
     "crown of the pale king": {
       "en": "Crown of the Pale King",
-      "jp": "���ールキングの王冠"
+      "jp": "ールキングの王冠"
     },
     "crown of the victor": {
       "en": "Crown of the Victor",
@@ -9024,7 +8992,7 @@
     },
     "gamblesprint": {
       "en": "Gamblesprint",
-      "jp": "ギャンブルスプリン���"
+      "jp": "ギャンブルスプリン"
     },
     "ghostmarch": {
       "en": "Ghostmarch",
@@ -9172,7 +9140,7 @@
     },
     "mahuxotls machination": {
       "en": "Mahuxotl's Machination",
-      "jp": "マフゾトールの���謀"
+      "jp": "マフゾトールの謀"
     },
     "maligaros virtuosity": {
       "en": "Maligaro's Virtuosity",
@@ -9332,7 +9300,7 @@
     },
     "sierran inheritance": {
       "en": "Sierran Inheritance",
-      "jp": "シエラの遺��"
+      "jp": "シエラの遺"
     },
     "silks of veneration": {
       "en": "Silks of Veneration",
@@ -9384,38 +9352,30 @@
     },
     "tetzlapokals desire": {
       "en": "Tetzlapokal's Desire",
-      "jp": "テツラポカルの欲望"
+      "jp": "黒い疑念"
     },
     "the barrow dweller": {
       "en": "The Barrow Dweller",
-      "jp": "古墳の住人"
+      "jp": "黒の記章"
     },
     "the black doubt": {
       "en": "The Black Doubt",
-      "jp": "黒い疑念"
+      "jp": "真鍮のドーム"
     },
     "the black insignia": {
       "en": "The Black Insignia",
-      "jp": "黒の記章"
+      "jp": "雨をもたらすもの"
     },
     "the brass dome": {
       "en": "The Brass Dome",
-      "jp": "真鍮のドーム"
+      "jp": "迫り来る災難"
     },
     "the bringer of rain": {
       "en": "The Bringer of Rain",
-      "jp": "雨をもたらすもの"
+      "jp": "契約"
     },
     "the coming calamity": {
       "en": "The Coming Calamity",
-      "jp": "迫り来る災難"
-    },
-    "the covenant": {
-      "en": "The Covenant",
-      "jp": "契約"
-    },
-    "the dancing mirage": {
-      "en": "The Dancing Mirage",
       "jp": "舞う蜃気楼"
     },
     "the deepest tower": {
@@ -9536,18 +9496,22 @@
     },
     "volls protector": {
       "en": "Voll's Protector",
-      "jp": "破滅の軌跡"
+      "jp": "ヴォールの保護具"
     },
     "wake of destruction": {
       "en": "Wake of Destruction",
-      "jp": "彷徨う遺物箱"
+      "jp": "破滅の軌跡"
     },
     "wandering reliquary": {
       "en": "Wandering Reliquary",
-      "jp": "ワンダーラスト"
+      "jp": "彷徨う遺物箱"
     },
     "wanderlust": {
       "en": "Wanderlust",
+      "jp": "ワンダーラスト"
+    },
+    "waveshaper": {
+      "en": "Waveshaper",
       "jp": "ウェーブシェイパー"
     },
     "widows reign": {
@@ -9748,7 +9712,7 @@
     },
     "brain rattler": {
       "en": "Brain Rattler",
-      "jp": "脳揺��し"
+      "jp": "脳揺し"
     },
     "brynhands mark": {
       "en": "Brynhand's Mark",

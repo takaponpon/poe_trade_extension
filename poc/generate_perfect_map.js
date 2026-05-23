@@ -82,6 +82,89 @@ function normalizeKey(str) {
     return norm.toLowerCase().replace(/['"`’‘“”]/g, "").replace(/\s+/g, " ").trim();
 }
 
+function sanitizeJp(str) {
+    if (!str) return "";
+    // Remove Unicode replacement characters (e.g. \ufffd\ufffd麻のサンダル -> 麻のサンダル)
+    let clean = str.replace(/\ufffd/g, '');
+    return clean.trim();
+}
+
+const categoryMap = [
+    // FEET (足防具)
+    { cat: 'feet', en: 'boots', jp: 'ブーツ' },
+    { cat: 'feet', en: 'sandals', jp: 'サンダル' },
+    { cat: 'feet', en: 'slippers', jp: '履物' },
+    { cat: 'feet', en: 'shoes', jp: '靴' },
+    { cat: 'feet', en: 'shoes', jp: 'シューズ' },
+    { cat: 'feet', en: 'greaves', jp: 'グリーヴ' },
+    { cat: 'feet', en: 'sabatons', jp: 'サバトン' },
+
+    // HANDS (手防具)
+    { cat: 'hands', en: 'bracers', jp: '弓籠手' },
+    { cat: 'hands', en: 'wraps', jp: 'ラップ' },
+    { cat: 'hands', en: 'gloves', jp: '手袋' },
+    { cat: 'hands', en: 'mitts', jp: 'ミット' },
+    { cat: 'hands', en: 'gauntlets', jp: 'ガントレット' },
+    { cat: 'hands', en: 'cuffs', jp: 'カフス' },
+
+    // HEAD (頭防具)
+    { cat: 'head', en: 'visage', jp: '顔飾り' },
+    { cat: 'head', en: 'hood', jp: 'フード' },
+    { cat: 'head', en: 'cap', jp: '帽子' },
+    { cat: 'head', en: 'mask', jp: '仮面' },
+    { cat: 'head', en: 'circlet', jp: 'サークレット' },
+    { cat: 'head', en: 'tiara', jp: 'ティアラ' },
+    { cat: 'head', en: 'crown', jp: '冠' },
+    { cat: 'head', en: 'helmet', jp: 'ヘルメット' },
+    { cat: 'head', en: 'helm', jp: '兜' },
+    { cat: 'head', en: 'helm', jp: 'ヘルム' },
+    { cat: 'head', en: 'greathelm', jp: 'グレートヘルム' },
+    { cat: 'head', en: 'burgonet', jp: 'バーゴネット' },
+    { cat: 'head', en: 'tricorne', jp: 'トリコーン' },
+
+    // SHIELD (盾 & 矢筒)
+    { cat: 'shield', en: 'shield', jp: 'シールド' },
+    { cat: 'shield', en: 'shield', jp: '盾' },
+    { cat: 'shield', en: 'buckler', jp: 'バックラー' },
+    { cat: 'shield', en: 'crest', jp: 'クレスト' },
+    { cat: 'shield', en: 'targe', jp: 'タージ' },
+    { cat: 'shield', en: 'quiver', jp: '矢筒' },
+
+    // BODY (胴防具)
+    { cat: 'body', en: 'vest', jp: 'ベスト' },
+    { cat: 'body', en: 'tunic', jp: 'チュニック' },
+    { cat: 'body', en: 'robe', jp: 'ローブ' },
+    { cat: 'body', en: 'coat', jp: 'コート' },
+    { cat: 'body', en: 'raiment', jp: '装束' },
+    { cat: 'body', en: 'hauberk', jp: 'ホーバーク' },
+    { cat: 'body', en: 'jacket', jp: 'ジャケット' },
+    { cat: 'body', en: 'brigandine', jp: 'ブリガンダイン' },
+    { cat: 'body', en: 'doublet', jp: 'ダブレット' },
+    { cat: 'body', en: 'chestplate', jp: '胸当て' },
+    { cat: 'body', en: 'cuirass', jp: '胴鎧' },
+    { cat: 'body', en: 'armour', jp: 'アーマー' },
+    { cat: 'body', en: 'armour', jp: '鎧' },
+    { cat: 'body', en: 'plate', jp: 'プレート' },
+    { cat: 'body', en: 'mail', jp: 'メイル' },
+    { cat: 'body', en: 'regalia', jp: 'レガリア' },
+    { cat: 'body', en: 'vestments', jp: '祭服' },
+    { cat: 'body', en: 'mantle', jp: '外套' },
+    { cat: 'body', en: 'garment', jp: 'ガーメント' },
+    { cat: 'body', en: 'leather', jp: '服' }
+];
+
+function getCategory(name, lang) {
+    const lower = name.toLowerCase();
+    for (const cat of categoryMap) {
+        const word = lang === 'en' ? cat.en : cat.jp;
+        if (lower.includes(word)) {
+            return cat.cat;
+        }
+    }
+    return 'unknown';
+}
+
+
 async function main() {
     console.log("Fetching English items...");
     const enData = await fetchUrl('https://www.pathofexile.com/api/trade2/data/items');
@@ -115,29 +198,97 @@ async function main() {
         console.log(`  Uniques - EN: ${enUniques.length}, JP: ${jpUniques.length}`);
 
         // Align base types
-        // If there's a length mismatch, let's find the extra elements and skip them.
         let baseEnIdx = 0;
         let baseJpIdx = 0;
-        while (baseEnIdx < enBases.length && baseJpIdx < jpBases.length) {
-            const enB = enBases[baseEnIdx];
-            const jpB = jpBases[baseJpIdx];
-            
-            // Special handling for the known single discrepancy in GGG items data:
-            // "Sekheman Crest Shield" is present in EN armour bases but completely missing in JP.
-            if (enB.type === "Sekheman Crest Shield") {
-                console.log(`    [Alignment] Skipping EN base at index ${baseEnIdx}: type="${enB.type}" (missing in JP)`);
-                baseEnIdx++;
-                continue;
+
+        if (enGroup.id === 'armour') {
+            // Highly robust alignment for armour bases using suffix categorization
+            while (baseEnIdx < enBases.length || baseJpIdx < jpBases.length) {
+                if (baseEnIdx >= enBases.length) {
+                    console.log(`    [Alignment] Skipping extra JP base at index ${baseJpIdx}: type="${jpBases[baseJpIdx].type}"`);
+                    baseJpIdx++;
+                    continue;
+                }
+                if (baseJpIdx >= jpBases.length) {
+                    console.log(`    [Alignment] Skipping extra EN base at index ${baseEnIdx}: type="${enBases[baseEnIdx].type}"`);
+                    baseEnIdx++;
+                    continue;
+                }
+
+                const enB = enBases[baseEnIdx];
+                const jpB = jpBases[baseJpIdx];
+
+                const enCat = getCategory(enB.type, 'en');
+                const jpCat = getCategory(jpB.type, 'jp');
+
+                if (enCat === jpCat) {
+                    const enTypeRaw = enB.type.trim();
+                    const normKey = normalizeKey(enTypeRaw);
+                    finalTypeMap[normKey] = {
+                        en: enTypeRaw,
+                        jp: sanitizeJp(jpB.type)
+                    };
+                    baseEnIdx++;
+                    baseJpIdx++;
+                } else {
+                    // Look ahead in EN list to see if we find jpCat
+                    let enLookAhead = -1;
+                    for (let i = baseEnIdx + 1; i < Math.min(enBases.length, baseEnIdx + 15); i++) {
+                        if (getCategory(enBases[i].type, 'en') === jpCat) {
+                            enLookAhead = i;
+                            break;
+                        }
+                    }
+
+                    // Look ahead in JP list to see if we find enCat
+                    let jpLookAhead = -1;
+                    for (let i = baseJpIdx + 1; i < Math.min(jpBases.length, baseJpIdx + 15); i++) {
+                        if (getCategory(jpBases[i].type, 'jp') === enCat) {
+                            jpLookAhead = i;
+                            break;
+                        }
+                    }
+
+                    if (enLookAhead !== -1 && (jpLookAhead === -1 || (enLookAhead - baseEnIdx < jpLookAhead - baseJpIdx))) {
+                        // Skip unmatched EN bases
+                        for (let i = baseEnIdx; i < enLookAhead; i++) {
+                            console.log(`    [Alignment] Skipping unmatched EN base at index ${i}: type="${enBases[i].type}"`);
+                        }
+                        baseEnIdx = enLookAhead;
+                    } else if (jpLookAhead !== -1) {
+                        // Skip unmatched JP bases
+                        for (let i = baseJpIdx; i < jpLookAhead; i++) {
+                            console.log(`    [Alignment] Skipping unmatched JP base at index ${i}: type="${jpBases[i].type}"`);
+                        }
+                        baseJpIdx = jpLookAhead;
+                    } else {
+                        // Hard mismatch fallback
+                        console.warn(`    [Alignment] Hard mismatch: EN "${enB.type}" (Cat: ${enCat}) vs JP "${jpB.type}" (Cat: ${jpCat})`);
+                        const enTypeRaw = enB.type.trim();
+                        const normKey = normalizeKey(enTypeRaw);
+                        finalTypeMap[normKey] = {
+                            en: enTypeRaw,
+                            jp: sanitizeJp(jpB.type)
+                        };
+                        baseEnIdx++;
+                        baseJpIdx++;
+                    }
+                }
             }
-            
-            const enTypeRaw = enB.type.trim();
-            const normKey = normalizeKey(enTypeRaw);
-            finalTypeMap[normKey] = {
-                en: enTypeRaw,
-                jp: jpB.type.trim()
-            };
-            baseEnIdx++;
-            baseJpIdx++;
+        } else {
+            // General group (no mismatch expected)
+            while (baseEnIdx < enBases.length && baseJpIdx < jpBases.length) {
+                const enB = enBases[baseEnIdx];
+                const jpB = jpBases[baseJpIdx];
+                const enTypeRaw = enB.type.trim();
+                const normKey = normalizeKey(enTypeRaw);
+                finalTypeMap[normKey] = {
+                    en: enTypeRaw,
+                    jp: sanitizeJp(jpB.type)
+                };
+                baseEnIdx++;
+                baseJpIdx++;
+            }
         }
 
         // Align uniques
@@ -193,14 +344,14 @@ async function main() {
             const normTypeKey = normalizeKey(enTypeRaw);
             finalTypeMap[normTypeKey] = {
                 en: enTypeRaw,
-                jp: jpU.type.trim()
+                jp: sanitizeJp(jpU.type)
             };
             if (enU.name && jpU.name) {
                 const enNameRaw = enU.name.trim();
                 const normNameKey = normalizeKey(enNameRaw);
                 finalNameMap[normNameKey] = {
                     en: enNameRaw,
-                    jp: jpU.name.trim()
+                    jp: sanitizeJp(jpU.name)
                 };
             }
             
