@@ -276,6 +276,29 @@
   transform: translateY(1px);
 }
 
+.btn-gold:disabled,
+.btn-gold.disabled {
+  background: var(--poe-bg-dark) !important;
+  border-color: rgba(200, 156, 60, 0.15) !important;
+  color: var(--poe-text-muted) !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  opacity: 0.6 !important;
+  pointer-events: auto !important; /* Ensure hover/mouseover still triggers tooltips */
+  transform: none !important;
+}
+
+.btn-gold:disabled:hover,
+.btn-gold.disabled:hover {
+  background: var(--poe-bg-dark) !important;
+  box-shadow: none !important;
+}
+
+.btn-gold:disabled:active,
+.btn-gold.disabled:active {
+  transform: none !important;
+}
+
 .btn-gray {
   width: 100%;
   background: #2d3542;

@@ -39,8 +39,9 @@ export function renderTagSuggestions() {
   state.savedSearches.forEach(search => {
     if (search.tags && Array.isArray(search.tags)) {
       search.tags.forEach(tag => {
-        if (tag.trim()) {
-          allTags.add(tag.trim().toLowerCase());
+        const trimmed = tag.trim();
+        if (trimmed && trimmed !== '完了') {
+          allTags.add(trimmed.toLowerCase());
         }
       });
     }
@@ -475,7 +476,7 @@ export function renderSavedList() {
     if (children.length === 0) {
       const placeholder = document.createElement('div');
       placeholder.className = 'folder-empty-placeholder';
-      placeholder.innerText = 'D&D items here';
+      placeholder.innerText = 'ここにアイテムをドラッグ＆ドロップ';
       folderContents.appendChild(placeholder);
     } else {
       children.forEach(item => {
@@ -508,7 +509,7 @@ export function renderSavedList() {
     if (unassignedItems.length === 0) {
       const placeholder = document.createElement('div');
       placeholder.className = 'unassigned-empty-placeholder';
-      placeholder.innerText = 'No unclassified items';
+      placeholder.innerText = '未分類のアイテムはありません';
       unassignedContents.appendChild(placeholder);
     } else {
       unassignedItems.forEach(item => {

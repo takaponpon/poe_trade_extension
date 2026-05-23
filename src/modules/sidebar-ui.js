@@ -126,12 +126,12 @@ export function initSidebar() {
           
           <div class="form-group">
             <label class="form-label">名前</label>
-            <input type="text" class="text-input" id="saveNameInput" placeholder="e.g. Chaos Orbs, Tier 1 Maps">
+            <input type="text" class="text-input" id="saveNameInput">
           </div>
           
           <div class="form-group">
             <label class="form-label">タグ (カンマ区切り)</label>
-            <input type="text" class="text-input" id="saveTagsInput" placeholder="e.g. currency, maps, rings">
+            <input type="text" class="text-input" id="saveTagsInput">
           </div>
 
           <!-- Tag suggestions bubble box -->
@@ -161,7 +161,7 @@ export function initSidebar() {
           
           <div class="form-group">
             <label class="form-label">フォルダ名</label>
-            <input type="text" class="text-input" id="folderNameInput" placeholder="e.g. Currency, Maps">
+            <input type="text" class="text-input" id="folderNameInput" placeholder="例：カレンシー、マップ">
           </div>
 
           <div class="inline-buttons">
@@ -203,7 +203,7 @@ export function initSidebar() {
           <div class="filter-controls" style="margin-top: 4px;">
             <div class="search-box-wrapper">
               <span class="search-icon">${ICONS.search}</span>
-              <input type="text" class="text-input" id="filterInput" placeholder="Search by name...">
+              <input type="text" class="text-input" id="filterInput" placeholder="名前で検索...">
             </div>
             <button class="btn-icon" id="resetFiltersBtn" title="Reset Filters">
               ${ICONS.reset}
@@ -214,7 +214,7 @@ export function initSidebar() {
           <div class="tag-filters-container" id="tagFiltersContainer"></div>
 
           <!-- Exclude Completed Toggle -->
-          <div class="exclude-completed-wrapper" style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px; padding-top: 6px; border-top: 1px solid rgba(200, 156, 60, 0.1);">
+          <div class="exclude-completed-wrapper" style="display: flex; align-items: center; justify-content: flex-start; gap: 8px; margin-top: 8px; padding-top: 6px; border-top: 1px solid rgba(200, 156, 60, 0.1);">
             <span class="form-label" style="margin-bottom: 0; font-size: 10px;">完了項目を除外</span>
             <label class="switch">
               <input type="checkbox" id="excludeCompletedInput">
@@ -249,6 +249,7 @@ export function initSidebar() {
           <div style="margin-top: 6px;">
             <button class="btn-gold tooltip-trigger" id="autoTravelBtn" style="width: 100%; margin-bottom: 6px;" data-tooltip="この機能はライブサーチにおける商品のリスティングを検知し、自動で隠れ家に転送する機能です。設定で隠れ家転送のCDを調整可能です。">自動転送を有効化</button>
             <button class="btn-gold tooltip-trigger" id="manualLiveSearchBtn" style="width: 100%;" data-tooltip="この機能はライブサーチを使わずに一定間隔で検索を実行し、検索結果に”たった今”出品されたものがあれば自動で隠れ家に転送する機能です。設定で検索の間隔を調整可能です。">手動ライブサーチを有効化</button>
+            <button class="btn-gold tooltip-trigger" id="showInJapaneseBtn" style="width: 100%; margin-top: 6px;">現在の検索結果を日本語で表示</button>
           </div>
         </div>
       </div>
@@ -430,6 +431,7 @@ function doGet(e) {
   elements.manualLiveSearchBtn = shadow.getElementById('manualLiveSearchBtn');
   elements.manualSearchIntervalInput = shadow.getElementById('manualSearchIntervalInput');
   elements.showRuneExcludedDefenseInput = shadow.getElementById('showRuneExcludedDefenseInput');
+  elements.showInJapaneseBtn = shadow.getElementById('showInJapaneseBtn');
 
   // Google Drive & Storage warning selectors
   elements.storageWarningBox = shadow.getElementById('storageWarningBox');
@@ -534,5 +536,23 @@ function bindUIEvents() {
         }
       });
     });
+  }
+
+  // Show in Japanese button setup and transition logic
+  const showInJapaneseBtn = elements.showInJapaneseBtn;
+  if (showInJapaneseBtn) {
+    const isJapanese = window.location.hostname === 'jp.pathofexile.com';
+    if (isJapanese) {
+      showInJapaneseBtn.classList.add('disabled');
+      showInJapaneseBtn.setAttribute('disabled', 'true');
+      showInJapaneseBtn.setAttribute('data-tooltip', '現在のページは既に日本語版です。');
+    } else {
+      showInJapaneseBtn.setAttribute('data-tooltip', '現在の検索結果を日本語版のサイトに遷移して表示します。');
+      showInJapaneseBtn.addEventListener('click', () => {
+        const currentUrl = new URL(window.location.href);
+        currentUrl.hostname = 'jp.pathofexile.com';
+        window.location.href = currentUrl.toString();
+      });
+    }
   }
 }
