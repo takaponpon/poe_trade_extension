@@ -1,0 +1,36 @@
+name: Build and Release Extension
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get version from manifest.json
+        id: get_version
+        run: |
+          VERSION=$(jq -r '.version' manifest.json)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create release zip
+        run: |
+          zip -r poe_trade_sidebar_v${{ steps.get_version.outputs.VERSION }}.zip manifest.json background.js content.js content.css popup.html popup.js popup.css icons/
+
+      - name: Update or Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "poe_trade_sidebar_v${{ steps.get_version.outputs.VERSION }}.zip"
+          tag: "v${{ steps.get_version.outputs.VERSION }}"
+          name: "Release v${{ steps.get_version.outputs.VERSION }}"
+          body: "Automated release from main branch commit ${{ github.sha }}."
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
