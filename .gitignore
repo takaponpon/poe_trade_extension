@@ -44,3 +44,10 @@ desktop.ini
 
 # Proof of concept exclusions
 poc/sample_code.txt
+poc/*.json
+poc/*.html
+poc/decoded.xml
+poc/filter_sample_payload.txt
+
+# Scratch scripts
+scratch/

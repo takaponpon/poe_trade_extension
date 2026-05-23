@@ -302,6 +302,8 @@ try {
   console.log("\n📦 PoB エクスポート文字列をデコード中...\n");
 
   const xml = decodePoBExport(POB_CODE);
+  fs.writeFileSync(path.join(__dirname, "decoded.xml"), xml, "utf-8");
+  console.log("💾 デコードされたXMLを decoded.xml に保存しました");
 
   // XML プレビュー
   console.log("\n--- XML プレビュー (先頭 500 文字) ---");
