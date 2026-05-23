@@ -489,13 +489,13 @@
         let prefix = "";
         let coreBase = rawBase;
         if (rawBase.startsWith("Expert ")) {
-          prefix = "熟練の";
+          prefix = "\u719f\u7df4\u306e";
           coreBase = rawBase.substring(7);
         } else if (rawBase.startsWith("Sturdy ")) {
-          prefix = "頑丈な";
+          prefix = "\u9811\u4e08\u306a";
           coreBase = rawBase.substring(7);
         } else if (rawBase.startsWith("Simple ")) {
-          prefix = "簡易な";
+          prefix = "\u7c21\u6613\u306a";
           coreBase = rawBase.substring(7);
         }
 
@@ -828,13 +828,13 @@
           let prefix = "";
           let coreBase = enBase;
           if (enBase.startsWith("Expert ")) {
-            prefix = "熟練の";
+            prefix = "\u719f\u7df4\u306e";
             coreBase = enBase.substring(7);
           } else if (enBase.startsWith("Sturdy ")) {
-            prefix = "頑丈な";
+            prefix = "\u9811\u4e08\u306a";
             coreBase = enBase.substring(7);
           } else if (enBase.startsWith("Simple ")) {
-            prefix = "簡易な";
+            prefix = "\u7c21\u6613\u306a";
             coreBase = enBase.substring(7);
           }
 
