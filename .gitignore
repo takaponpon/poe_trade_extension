@@ -42,3 +42,5 @@ desktop.ini
 # Chrome Dev Profile
 .chrome-profile/
 
+# Proof of concept exclusions
+poc/sample_code.txt

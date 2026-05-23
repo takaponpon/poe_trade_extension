@@ -18,7 +18,9 @@
     itemHeight: 'poe2_item_height',
     autoTravelCooldown: 'poe2_auto_travel_cooldown',
     manualSearchInterval: 'poe2_manual_search_interval',
-    showRuneExcludedDefense: 'poe2_show_rune_excluded_defense'
+    showRuneExcludedDefense: 'poe2_show_rune_excluded_defense',
+    gasUrl: 'poe2_trade_gas_url',
+    gasSyncMode: 'poe2_trade_gas_sync_mode'
   };
 
   const DEFAULT_WIDTH = 300;
@@ -27,6 +29,78 @@
   const MAX_WIDTH = 600;
   const DEFAULT_MAX_VISIBLE_TAGS = 10;
   const DEFAULT_ITEM_HEIGHT = 36;
+  const STORAGE_LIMIT_BYTES = 10485760; // 10MB default limit
+  const STORAGE_WARNING_THRESHOLD = 0.97; // 97% threshold
+
+  // Timing constants
+  const POLLING_INTERVAL_MS = 500;
+  const TOAST_DURATION_MS = 3000;
+  const IMPORT_SUCCESS_DISPLAY_MS = 2000;
+  const IMPORT_RESET_DELAY_MS = 300;
+  const ERROR_HIGHLIGHT_MS = 1000;
+  const DEBOUNCE_DELAY_MS = 150;
+
+  // Utility: HTML escaping to prevent XSS
+  function escapeHtml(str) {
+    if (typeof str !== 'string') return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // Utility: Generate unique ID
+  function generateId(prefix) {
+    return `${prefix}_${crypto.randomUUID()}`;
+  }
+
+  // Utility: Check if a button is a teleport/hideout button
+  function isTeleportButton(btnText) {
+    const text = (btnText || '').trim().toLowerCase();
+    return (
+      text.includes('travel to hideout') ||
+      text.includes('teleport anyway') ||
+      text.includes('隠れ家') ||
+      text.includes('テレポート')
+    );
+  }
+
+  // Utility: Debounce function
+  function debounce(fn, delay) {
+    let timer = null;
+    return function (...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn.apply(this, args), delay);
+    };
+  }
+
+  // Utility: Storage helper with error handling
+  function storageSet(data, callback) {
+    chrome.storage.local.set(data, () => {
+      if (chrome.runtime.lastError) {
+        console.error('PoE2 Trade Extension: Storage write error:', chrome.runtime.lastError.message);
+      }
+      checkStorageUsage();
+      
+      // Auto push to cloud if sync mode is active and searches/folders are saved
+      if (gasSyncMode && !isPullingFromCloud && (data[STORAGE_KEYS.savedSearches] !== undefined || data[STORAGE_KEYS.savedFolders] !== undefined)) {
+        autoPushToCloud();
+      }
+      
+      if (callback) callback();
+    });
+  }
+
+  function storageGet(keys, callback) {
+    chrome.storage.local.get(keys, (items) => {
+      if (chrome.runtime.lastError) {
+        console.error('PoE2 Trade Extension: Storage read error:', chrome.runtime.lastError.message);
+      }
+      callback(items || {});
+    });
+  }
 
   // State Variables
   let currentWidth = DEFAULT_WIDTH;
@@ -41,6 +115,8 @@
   let isExportMode = false;
   let isImportMode = false;
   let tempImportData = null;
+  let gasSyncMode = false;
+  let isPullingFromCloud = false;
   let showAllTags = false;
   let maxVisibleTags = DEFAULT_MAX_VISIBLE_TAGS;
   let itemHeight = DEFAULT_ITEM_HEIGHT;
@@ -135,6 +211,9 @@
             ${ICONS.settings}
           </button>
         </div>
+        
+        <!-- Storage capacity warning box (Initially Hidden) -->
+        <div class="storage-warning-box" id="storageWarningBox" style="display: none;"></div>
 
         <!-- Inline Save Search Form (Initially Hidden) -->
         <div class="inline-form-container" id="inlineSaveForm">
@@ -312,11 +391,73 @@
             </label>
           </div>
         </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">外部ストレージ (Google Drive同期)</div>
+          <div class="form-group" style="flex-direction: column; align-items: stretch; gap: 8px;">
+            <label class="form-label" style="margin-bottom: 2px;">Google Apps Script Web App URL</label>
+            <input type="url" class="text-input" id="gasUrlInput" placeholder="https://script.google.com/macros/s/.../exec" style="font-size: 11px;">
+            
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+              <span class="form-label" style="margin-bottom: 0;">Google Drive同期モード</span>
+              <label class="switch">
+                <input type="checkbox" id="gasSyncModeInput">
+                <span class="slider round"></span>
+              </label>
+            </div>
+            
+            <div style="display: flex; gap: 8px; margin-top: 4px;">
+              <button class="btn-gold btn-sm" id="gasSyncNowBtn" style="flex: 1; font-size: 11px; padding: 6px;">今すぐ最新データを受信</button>
+            </div>
+            
+            <span class="setup-instruction-toggle" id="gasInstructionsToggle">Google Drive連携のセットアップ方法を表示</span>
+            <div class="gas-instructions-content" id="gasInstructionsContent" style="display: none;">
+              1. Google Driveにアクセスし、新規 ➔ その他 ➔ <strong>Google Apps Script</strong> を選択します。<br>
+              2. エディタに以下のコードを貼り付けます。<br>
+              <pre class="gas-code-block" id="gasCodeTemplate">function doPost(e) {
+  var data = JSON.parse(e.postData.contents);
+  var folder = DriveApp.getRootFolder();
+  var files = folder.getFilesByName("poe2_trade_backup.json");
+  var file = files.hasNext() ? files.next().setContent(JSON.stringify(data)) 
+                             : folder.createFile("poe2_trade_backup.json", JSON.stringify(data), MimeType.PLAIN_TEXT);
+  return ContentService.createTextOutput(JSON.stringify({status: "success"})).setMimeType(ContentService.MimeType.JSON);
+}
+function doGet(e) {
+  var folder = DriveApp.getRootFolder();
+  var files = folder.getFilesByName("poe2_trade_backup.json");
+  var data = {searches: [], folders: []};
+  if (files.hasNext()) { data = JSON.parse(files.next().getAs("text/plain").getDataAsString()); }
+  return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);
+}</pre>
+              3. 右上の「デプロイ」➔「新しいデプロイ」をクリックします。<br>
+              4. 種類の選択で「ウェブアプリ」を選択します。<br>
+              5. 設定を以下のように変更します：<br>
+              &nbsp;&nbsp;- 次のユーザーとして実行: <strong>「自分」</strong><br>
+              &nbsp;&nbsp;- アクセスできるユーザー: <strong>「全員」</strong><br>
+              6. 「デプロイ」ボタンを押し、表示された「ウェブアプリのURL」をコピーして、上記の入力欄に貼り付けます。
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   `;
 
   shadow.appendChild(sidebarContainer);
+
+  // Toast notification element (inside Shadow DOM)
+  const toastEl = document.createElement('div');
+  toastEl.className = 'toast-notification';
+  shadow.appendChild(toastEl);
+
+  function showToast(message, type = 'info') {
+    toastEl.textContent = message;
+    toastEl.className = 'toast-notification';
+    if (type === 'warning') toastEl.classList.add('toast-warning');
+    toastEl.classList.add('visible');
+    setTimeout(() => {
+      toastEl.classList.remove('visible');
+    }, TOAST_DURATION_MS);
+  }
 
   // 6. Select Injected Elements
   const toggleBtn = shadow.getElementById('toggleBtn');
@@ -383,6 +524,14 @@
   const manualSearchIntervalInput = shadow.getElementById('manualSearchIntervalInput');
   const showRuneExcludedDefenseInput = shadow.getElementById('showRuneExcludedDefenseInput');
 
+  // Google Drive & Storage warning selectors
+  const storageWarningBox = shadow.getElementById('storageWarningBox');
+  const gasUrlInput = shadow.getElementById('gasUrlInput');
+  const gasSyncModeInput = shadow.getElementById('gasSyncModeInput');
+  const gasSyncNowBtn = shadow.getElementById('gasSyncNowBtn');
+  const gasInstructionsToggle = shadow.getElementById('gasInstructionsToggle');
+  const gasInstructionsContent = shadow.getElementById('gasInstructionsContent');
+
   function updateItemHeightStyles(height) {
     const h = parseInt(height, 10) || DEFAULT_ITEM_HEIGHT;
     
@@ -413,7 +562,7 @@
     const val = parseInt(e.target.value, 10) || DEFAULT_ITEM_HEIGHT;
     itemHeight = val;
     updateItemHeightStyles(val);
-    chrome.storage.sync.set({ [STORAGE_KEYS.itemHeight]: val });
+    storageSet({ [STORAGE_KEYS.itemHeight]: val });
   });
 
   // Settings Panel Handlers
@@ -433,7 +582,7 @@
       value = 1;
     }
     maxVisibleTags = value;
-    chrome.storage.sync.set({ [STORAGE_KEYS.maxVisibleTags]: maxVisibleTags }, () => {
+    storageSet({ [STORAGE_KEYS.maxVisibleTags]: maxVisibleTags }, () => {
       renderTagFilters();
     });
   });
@@ -445,7 +594,7 @@
     }
     maxVisibleTags = value;
     maxVisibleTagsInput.value = maxVisibleTags;
-    chrome.storage.sync.set({ [STORAGE_KEYS.maxVisibleTags]: maxVisibleTags }, () => {
+    storageSet({ [STORAGE_KEYS.maxVisibleTags]: maxVisibleTags }, () => {
       renderTagFilters();
     });
   });
@@ -458,7 +607,7 @@
       value = 0;
     }
     autoTravelCooldown = value;
-    chrome.storage.sync.set({ [STORAGE_KEYS.autoTravelCooldown]: autoTravelCooldown });
+    storageSet({ [STORAGE_KEYS.autoTravelCooldown]: autoTravelCooldown });
   });
 
   autoTravelCooldownInput.addEventListener('blur', (e) => {
@@ -468,7 +617,7 @@
     }
     autoTravelCooldown = value;
     autoTravelCooldownInput.value = autoTravelCooldown;
-    chrome.storage.sync.set({ [STORAGE_KEYS.autoTravelCooldown]: autoTravelCooldown });
+    storageSet({ [STORAGE_KEYS.autoTravelCooldown]: autoTravelCooldown });
   });
 
   manualSearchIntervalInput.addEventListener('input', (e) => {
@@ -479,7 +628,7 @@
       value = 5;
     }
     manualSearchInterval = value;
-    chrome.storage.sync.set({ [STORAGE_KEYS.manualSearchInterval]: manualSearchInterval });
+    storageSet({ [STORAGE_KEYS.manualSearchInterval]: manualSearchInterval });
   });
 
   manualSearchIntervalInput.addEventListener('blur', (e) => {
@@ -489,14 +638,342 @@
     }
     manualSearchInterval = value;
     manualSearchIntervalInput.value = manualSearchInterval;
-    chrome.storage.sync.set({ [STORAGE_KEYS.manualSearchInterval]: manualSearchInterval });
+    storageSet({ [STORAGE_KEYS.manualSearchInterval]: manualSearchInterval });
   });
 
   showRuneExcludedDefenseInput.addEventListener('change', (e) => {
     showRuneExcludedDefense = e.target.checked;
-    chrome.storage.sync.set({ [STORAGE_KEYS.showRuneExcludedDefense]: showRuneExcludedDefense }, () => {
+    storageSet({ [STORAGE_KEYS.showRuneExcludedDefense]: showRuneExcludedDefense }, () => {
       applyRuneExcludedDefenseToAll();
     });
+  });
+
+  // Storage capacity warning logic
+  function checkStorageUsage() {
+    if (typeof shadow === 'undefined' || !shadow) return;
+    const box = shadow.getElementById('storageWarningBox');
+    if (!box) return;
+
+    chrome.storage.local.getBytesInUse(null, (bytesInUse) => {
+      if (chrome.runtime.lastError) {
+        console.error('PoE2 Trade Extension: Error getting storage bytes:', chrome.runtime.lastError.message);
+        return;
+      }
+      
+      const percentage = bytesInUse / STORAGE_LIMIT_BYTES;
+      if (percentage >= STORAGE_WARNING_THRESHOLD) {
+        const percentageString = (percentage * 100).toFixed(1);
+        box.innerHTML = `⚠️ 保存容量が残り僅かです (${percentageString}% 使用中)<br>不要な履歴を削除するか、外部保存を実行してください。`;
+        box.style.display = 'block';
+      } else {
+        box.style.display = 'none';
+      }
+    });
+  }
+
+  // Google Apps Script url input storage binder
+  gasUrlInput.addEventListener('input', (e) => {
+    const val = e.target.value.trim();
+    storageSet({ [STORAGE_KEYS.gasUrl]: val });
+  });
+
+  // Google Drive Setup Instructions Toggle
+  gasInstructionsToggle.addEventListener('click', () => {
+    const isHidden = gasInstructionsContent.style.display === 'none';
+    if (isHidden) {
+      gasInstructionsContent.style.display = 'block';
+      gasInstructionsToggle.textContent = 'Google Drive連携のセットアップ方法を閉じる';
+    } else {
+      gasInstructionsContent.style.display = 'none';
+      gasInstructionsToggle.textContent = 'Google Drive連携のセットアップ方法を表示';
+    }
+  });
+
+  // Helper to push to cloud
+  function syncPushToCloud(searches, folders) {
+    const url = gasUrlInput.value.trim();
+    if (!url || !url.startsWith('https://script.google.com/')) {
+      return Promise.reject(new Error('Invalid or missing GAS URL'));
+    }
+    
+    const payload = {
+      searches: searches,
+      folders: folders
+    };
+    
+    return fetch(url, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'text/plain'
+      },
+      body: JSON.stringify(payload)
+    })
+    .then(response => {
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return response.json();
+    })
+    .then(data => {
+      if (data && data.status === 'success') {
+        return data;
+      } else {
+        throw new Error('Sync push returned unsuccessful status');
+      }
+    });
+  }
+
+  // Helper to pull from cloud
+  function syncPullFromCloud() {
+    const url = gasUrlInput.value.trim();
+    if (!url || !url.startsWith('https://script.google.com/')) {
+      return Promise.reject(new Error('Invalid or missing GAS URL'));
+    }
+    
+    return fetch(url, {
+      method: 'GET',
+      mode: 'cors'
+    })
+    .then(response => {
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return response.json();
+    })
+    .then(data => {
+      if (data && Array.isArray(data.searches) && Array.isArray(data.folders)) {
+        return data;
+      } else {
+        throw new Error('Invalid format received from cloud');
+      }
+    });
+  }
+
+  // Auto push trigger
+  function autoPushToCloud() {
+    syncPushToCloud(savedSearches, savedFolders)
+      .then(() => {
+        console.log('PoE2 Trade Extension: Auto-sync push successful.');
+      })
+      .catch(err => {
+        console.error('PoE2 Trade Extension: Auto-sync push error:', err);
+      });
+  }
+
+  // Helper to merge cloud and local databases
+  function mergeCloudAndLocal(cloud, local) {
+    const mergedSearches = [];
+    const localSearchMap = new Map();
+    local.searches.forEach(s => {
+      if (s && s.id) localSearchMap.set(s.id, s);
+    });
+
+    // Local searches take priority, but also pull cloud ones that don't exist in local
+    local.searches.forEach(s => {
+      if (s && s.id) mergedSearches.push(s);
+    });
+    cloud.searches.forEach(s => {
+      if (s && s.id && !localSearchMap.has(s.id)) {
+        mergedSearches.push(s);
+      }
+    });
+
+    const mergedFolders = [];
+    const localFolderMap = new Map();
+    local.folders.forEach(f => {
+      if (f && f.id) localFolderMap.set(f.id, f);
+    });
+    const cloudFolderMap = new Map();
+    cloud.folders.forEach(f => {
+      if (f && f.id) cloudFolderMap.set(f.id, f);
+    });
+
+    // Merge folder structures
+    local.folders.forEach(f => {
+      if (f && f.id) {
+        const cloudFolder = cloudFolderMap.get(f.id);
+        if (cloudFolder) {
+          // Merge searchIds and remove duplicates
+          const combinedSearchIds = [...new Set([...(f.searchIds || []), ...(cloudFolder.searchIds || [])])];
+          mergedFolders.push({
+            ...f,
+            searchIds: combinedSearchIds
+          });
+        } else {
+          mergedFolders.push(f);
+        }
+      }
+    });
+    // Cloud folders that don't exist in local
+    cloud.folders.forEach(f => {
+      if (f && f.id && !localFolderMap.has(f.id)) {
+        mergedFolders.push(f);
+      }
+    });
+
+    return { searches: mergedSearches, folders: mergedFolders };
+  }
+
+  // Google Drive Sync Mode Input Change Listener
+  gasSyncModeInput.addEventListener('change', (e) => {
+    const isChecked = e.target.checked;
+    const url = gasUrlInput.value.trim();
+
+    if (isChecked) {
+      // Transition OFF ➔ ON
+      if (!url) {
+        showToast('Google Apps ScriptのURLを設定してください。', 'warning');
+        gasSyncModeInput.checked = false;
+        return;
+      }
+      if (!url.startsWith('https://script.google.com/')) {
+        showToast('無効なURL形式です。Google Apps ScriptのウェブアプリURLを入力してください。', 'warning');
+        gasSyncModeInput.checked = false;
+        return;
+      }
+
+      showToast('同期を開始します。データを取得中...', 'info');
+
+      syncPullFromCloud()
+        .then(cloudData => {
+          showToast('データをマージ中...', 'info');
+          const merged = mergeCloudAndLocal(cloudData, { searches: savedSearches, folders: savedFolders });
+          savedSearches = merged.searches;
+          savedFolders = merged.folders;
+
+          return syncPushToCloud(savedSearches, savedFolders)
+            .then(() => {
+              gasSyncMode = true;
+              storageSet({
+                [STORAGE_KEYS.gasSyncMode]: true,
+                [STORAGE_KEYS.savedSearches]: savedSearches,
+                [STORAGE_KEYS.savedFolders]: savedFolders
+              }, () => {
+                renderSavedList();
+                renderTagFilters();
+                showToast('Google Drive同期モードがONになりました。データをマージしてアップロードしました！', 'info');
+              });
+            });
+        })
+        .catch(error => {
+          console.warn('PoE2 Trade Extension: Could not pull cloud data (perhaps it is empty or new), proceeding to upload local data as initial cloud store:', error);
+          
+          // If fetch/format failed because there is no cloud backup yet, we initialize cloud with local data
+          syncPushToCloud(savedSearches, savedFolders)
+            .then(() => {
+              gasSyncMode = true;
+              storageSet({
+                [STORAGE_KEYS.gasSyncMode]: true
+              }, () => {
+                showToast('Google Drive同期モードがONになりました。ローカルデータで初期化しました！', 'info');
+              });
+            })
+            .catch(err => {
+              console.error('PoE2 Trade Extension: Failed to upload initial data to cloud:', err);
+              gasSyncModeInput.checked = false;
+              showToast('同期接続に失敗しました。接続設定を確認してください。', 'warning');
+            });
+        });
+
+    } else {
+      // Transition ON ➔ OFF
+      if (!url) {
+        // If url is deleted, just turn it off
+        gasSyncMode = false;
+        storageSet({ [STORAGE_KEYS.gasSyncMode]: false }, () => {
+          showToast('Google Drive同期モードをオフにしました。', 'info');
+        });
+        return;
+      }
+
+      showToast('同期をオフにします。最新データを確認中...', 'info');
+
+      syncPullFromCloud()
+        .then(cloudData => {
+          // Check byte size of the downloaded database
+          const serialized = JSON.stringify(cloudData);
+          const size = new Blob([serialized]).size;
+
+          if (size >= STORAGE_LIMIT_BYTES) {
+            const warningMsg = `【警告】同期をオフにすると、Google Drive上のデータ(約 ${(size / 1024 / 1024).toFixed(2)} MB)がすべてローカルに移行されます。\n\n` +
+                               `しかし、このデータ量はChrome拡張機能のローカル保存容量制限(10MB)を超えているため、一部のデータが欠損します。\n` +
+                               `同期をオフにする前に、設定画面からJSONファイルとして手動エクスポートし、バックアップを保存することを強く推奨します。\n\n` +
+                               `同期の解除を続行し、データが欠損するリスクを受け入れますか？`;
+            const proceed = confirm(warningMsg);
+            if (!proceed) {
+              // Revert toggle
+              gasSyncModeInput.checked = true;
+              showToast('同期モード解除をキャンセルしました。', 'info');
+              return;
+            }
+          }
+
+          // Disable sync and save the retrieved cloud data to local
+          savedSearches = cloudData.searches;
+          savedFolders = cloudData.folders;
+          gasSyncMode = false;
+
+          storageSet({
+            [STORAGE_KEYS.gasSyncMode]: false,
+            [STORAGE_KEYS.savedSearches]: savedSearches,
+            [STORAGE_KEYS.savedFolders]: savedFolders
+          }, () => {
+            renderSavedList();
+            renderTagFilters();
+            showToast('Google Drive同期モードをオフにし、データをローカルに保存しました。', 'info');
+          });
+        })
+        .catch(error => {
+          console.error('PoE2 Trade Extension: Failed to fetch cloud data during OFF transition:', error);
+          const proceed = confirm('Google Driveからの最新データの取得に失敗しました。現在のローカルキャッシュのままで同期をオフにしますか？');
+          if (proceed) {
+            gasSyncMode = false;
+            storageSet({ [STORAGE_KEYS.gasSyncMode]: false }, () => {
+              showToast('Google Drive同期モードをオフにしました。', 'info');
+            });
+          } else {
+            // Revert toggle
+            gasSyncModeInput.checked = true;
+          }
+        });
+    }
+  });
+
+  // Google Drive Sync Now Click Listener
+  gasSyncNowBtn.addEventListener('click', () => {
+    const url = gasUrlInput.value.trim();
+    if (!url) {
+      showToast('Google Apps ScriptのURLを入力してください。', 'warning');
+      return;
+    }
+    if (!url.startsWith('https://script.google.com/')) {
+      showToast('無効なURL形式です。Google Apps ScriptのウェブアプリURLを入力してください。', 'warning');
+      return;
+    }
+
+    const confirmSync = confirm('Google Driveから最新データを受信して同期しますか？\n現在のローカルデータはクラウドのデータで上書きされます。');
+    if (!confirmSync) return;
+
+    showToast('最新データを取得中...', 'info');
+
+    syncPullFromCloud()
+      .then(cloudData => {
+        savedSearches = cloudData.searches;
+        savedFolders = cloudData.folders;
+        
+        isPullingFromCloud = true;
+        storageSet({
+          [STORAGE_KEYS.savedSearches]: savedSearches,
+          [STORAGE_KEYS.savedFolders]: savedFolders
+        }, () => {
+          isPullingFromCloud = false;
+          renderSavedList();
+          renderTagFilters();
+          checkStorageUsage();
+          showToast('最新データを正常に受信しました！', 'info');
+        });
+      })
+      .catch(error => {
+        console.error('PoE2 Trade Extension: Fetch latest sync error:', error);
+        showToast('データの受信に失敗しました。接続設定を確認してください。', 'warning');
+      });
   });
 
   // Accordion Toggle Logic
@@ -560,7 +1037,7 @@
     document.documentElement.style.transition = 'padding-right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
 
     // Persist new width
-    chrome.storage.sync.set({ [STORAGE_KEYS.sidebarWidth]: currentWidth });
+    storageSet({ [STORAGE_KEYS.sidebarWidth]: currentWidth });
   });
 
   function updateSidebarWidth(width) {
@@ -643,7 +1120,7 @@
     if (!name) {
       folderNameInput.focus();
       folderNameInput.classList.add('error');
-      setTimeout(() => folderNameInput.classList.remove('error'), 1000);
+      setTimeout(() => folderNameInput.classList.remove('error'), ERROR_HIGHLIGHT_MS);
       return;
     }
 
@@ -652,12 +1129,12 @@
     if (isDuplicate) {
       folderNameInput.focus();
       folderNameInput.classList.add('error');
-      setTimeout(() => folderNameInput.classList.remove('error'), 1000);
+      setTimeout(() => folderNameInput.classList.remove('error'), ERROR_HIGHLIGHT_MS);
       return;
     }
 
     const newFolder = {
-      id: 'folder_' + Date.now(),
+      id: generateId('folder'),
       name: name,
       isCollapsed: false
     };
@@ -672,7 +1149,7 @@
   });
 
   function persistSavedFolders() {
-    chrome.storage.sync.set({ [STORAGE_KEYS.savedFolders]: savedFolders }, () => {
+    storageSet({ [STORAGE_KEYS.savedFolders]: savedFolders }, () => {
       renderSavedList();
     });
   }
@@ -699,7 +1176,7 @@
     if (!name) {
       saveNameInput.focus();
       saveNameInput.classList.add('error');
-      setTimeout(() => saveNameInput.classList.remove('error'), 1000);
+      setTimeout(() => saveNameInput.classList.remove('error'), ERROR_HIGHLIGHT_MS);
       return;
     }
 
@@ -754,23 +1231,27 @@
   });
 
   function saveNewSearch(data) {
-    data.id = 'search_' + Date.now();
+    data.id = generateId('search');
     data.createdAt = Date.now();
     savedSearches.push(data);
     persistSavedSearches();
   }
 
   function persistSavedSearches() {
-    chrome.storage.sync.set({ [STORAGE_KEYS.savedSearches]: savedSearches }, () => {
+    storageSet({ [STORAGE_KEYS.savedSearches]: savedSearches }, () => {
       renderSavedList();
       renderTagFilters();
     });
   }
 
   // 11. Dual Filtering & List Rendering
+  const debouncedRender = debounce(() => {
+    renderSavedList();
+  }, DEBOUNCE_DELAY_MS);
+
   filterInput.addEventListener('input', (e) => {
     filterText = e.target.value.trim().toLowerCase();
-    renderSavedList();
+    debouncedRender();
   });
 
   resetFiltersBtn.addEventListener('click', () => {
@@ -834,15 +1315,15 @@
 
     // Add toggle button if more than limit tags
     if (hasMoreThanLimit) {
-      const toggleBtn = document.createElement('span');
-      toggleBtn.className = 'toggle-all-tags-btn';
-      toggleBtn.innerText = showAllTags ? '▲ タグを折りたたむ' : `▼ 全てのタグを表示 (${tagsArray.length - maxVisibleTags}個+)`;
+      const tagToggleBtn = document.createElement('span');
+      tagToggleBtn.className = 'toggle-all-tags-btn';
+      tagToggleBtn.innerText = showAllTags ? '▲ タグを折りたたむ' : `▼ 全てのタグを表示 (${tagsArray.length - maxVisibleTags}個+)`;
       
-      toggleBtn.addEventListener('click', () => {
+      tagToggleBtn.addEventListener('click', () => {
         showAllTags = !showAllTags;
         renderTagFilters();
       });
-      tagFiltersContainer.appendChild(toggleBtn);
+      tagFiltersContainer.appendChild(tagToggleBtn);
     }
   }
 
@@ -921,7 +1402,7 @@
     });
 
     // 3. Persist to storage
-    chrome.storage.sync.set({
+    storageSet({
       [STORAGE_KEYS.savedFolders]: savedFolders,
       [STORAGE_KEYS.savedSearches]: savedSearches
     }, () => {
@@ -1029,6 +1510,11 @@
     }
   });
 
+  savedList.addEventListener('drop', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  });
+
   function renderSavedList() {
     savedList.innerHTML = '';
 
@@ -1077,16 +1563,16 @@
       if (item.tags && item.tags.length > 0) {
         tagsMarkup = `
           <div class="saved-item-tags">
-            ${item.tags.map(t => `<span class="saved-item-tag-badge">${t}</span>`).join('')}
+            ${item.tags.map(t => `<span class="saved-item-tag-badge">${escapeHtml(t)}</span>`).join('')}
           </div>
         `;
       }
 
       row.innerHTML = `
-        <input type="checkbox" class="export-item-checkbox" data-item-id="${item.id}" ${item.folderId ? `data-folder-id="${item.folderId}"` : ''}>
-        <div class="saved-item-info" title="${item.name}">
+        <input type="checkbox" class="export-item-checkbox" data-item-id="${escapeHtml(item.id)}" ${item.folderId ? `data-folder-id="${escapeHtml(item.folderId)}"` : ''}>
+        <div class="saved-item-info" title="${escapeHtml(item.name)}">
           <div class="saved-item-info-row">
-            <div class="saved-item-name">${item.name}</div>
+            <div class="saved-item-name">${escapeHtml(item.name)}</div>
             ${tagsMarkup}
           </div>
         </div>
@@ -1186,10 +1672,10 @@
       const chevron = '▼';
 
       folderHeader.innerHTML = `
-        <input type="checkbox" class="export-folder-checkbox" data-folder-id="${folder.id}">
+        <input type="checkbox" class="export-folder-checkbox" data-folder-id="${escapeHtml(folder.id)}">
         <div class="folder-title-wrapper">
           <span class="folder-icon">${ICONS.folder}</span>
-          <span class="folder-name" title="${folder.name}">${folder.name}</span>
+          <span class="folder-name" title="${escapeHtml(folder.name)}">${escapeHtml(folder.name)}</span>
         </div>
         <span class="folder-chevron">${chevron}</span>
         <button class="action-btn folder-trash-btn" title="Delete Folder">
@@ -1247,7 +1733,7 @@
           savedFolders = savedFolders.filter(f => f.id !== folder.id);
 
           // Save both searches and folders in one sync execution
-          chrome.storage.sync.set({
+          storageSet({
             [STORAGE_KEYS.savedSearches]: savedSearches,
             [STORAGE_KEYS.savedFolders]: savedFolders
           }, () => {
@@ -1400,7 +1886,7 @@
       .map(cb => cb.getAttribute('data-item-id'));
 
     if (selectedItemIds.length === 0) {
-      alert("エクスポートする検索結果を選択してください。");
+      showToast('エクスポートする検索結果を選択してください。', 'warning');
       return;
     }
 
@@ -1572,7 +2058,7 @@
         if (existingFolder) {
           folderIdMap[impFolder.id] = existingFolder.id;
         } else {
-          const newFolderId = 'folder_' + (Date.now() + index);
+          const newFolderId = generateId('folder');
           const newFolder = {
             id: newFolderId,
             name: impFolder.name,
@@ -1607,7 +2093,7 @@
           }
         } else {
           // New insert
-          const newSearchId = 'search_' + (Date.now() + Math.random().toString(36).substr(2, 9));
+          const newSearchId = generateId('search');
           const newSearch = {
             id: newSearchId,
             name: impSearch.name,
@@ -1621,7 +2107,7 @@
         }
       });
 
-      chrome.storage.sync.set({
+      storageSet({
         [STORAGE_KEYS.savedSearches]: savedSearches,
         [STORAGE_KEYS.savedFolders]: savedFolders
       }, () => {
@@ -1691,19 +2177,13 @@
         const directBtn = firstRow.querySelector('.direct-btn');
         if (directBtn) {
           const btnText = (directBtn.textContent || "").trim();
-          const btnTextLower = btnText.toLowerCase();
-          if (
-            btnTextLower.includes("travel to hideout") ||
-            btnTextLower.includes("teleport anyway") ||
-            btnTextLower.includes("隠れ家") ||
-            btnTextLower.includes("テレポート")
-          ) {
+          if (isTeleportButton(btnText)) {
             directBtn.click();
             lastClickedTime = Date.now();
           }
         }
       }
-    }, 100);
+    }, POLLING_INTERVAL_MS);
 
     // 3. Update button UI
     autoTravelBtn.innerText = "自動転送の停止";
@@ -1897,13 +2377,7 @@
           const directBtn = row.querySelector('.direct-btn');
           if (directBtn) {
             const btnText = (directBtn.textContent || "").trim();
-            const btnTextLower = btnText.toLowerCase();
-            if (
-              btnTextLower.includes("travel to hideout") ||
-              btnTextLower.includes("teleport anyway") ||
-              btnTextLower.includes("隠れ家") ||
-              btnTextLower.includes("テレポート")
-            ) {
+            if (isTeleportButton(btnText)) {
               directBtn.click();
               lastClickedTime = Date.now();
               break; // Trigger only one click at a time
@@ -1911,7 +2385,7 @@
           }
         }
       }
-    }, 100);
+    }, POLLING_INTERVAL_MS);
 
     // 5. Update Button UI
     manualLiveSearchBtn.innerText = "手動ライブサーチの停止";
@@ -1941,8 +2415,15 @@
   });
 
 
+  // Collapsing toggle click event handler registered early to ensure UI responsiveness
+  toggleBtn.addEventListener('click', () => {
+    isCollapsed = !sidebarContainer.classList.contains('collapsed');
+    updatePageLayout(isCollapsed);
+    storageSet({ [STORAGE_KEYS.collapsed]: isCollapsed });
+  });
+
   // 12. Load Initial State on Boot
-  chrome.storage.sync.get([
+  storageGet([
     STORAGE_KEYS.collapsed,
     STORAGE_KEYS.sidebarWidth,
     STORAGE_KEYS.savedSearches,
@@ -1951,7 +2432,9 @@
     STORAGE_KEYS.itemHeight,
     STORAGE_KEYS.autoTravelCooldown,
     STORAGE_KEYS.manualSearchInterval,
-    STORAGE_KEYS.showRuneExcludedDefense
+    STORAGE_KEYS.showRuneExcludedDefense,
+    STORAGE_KEYS.gasUrl,
+    STORAGE_KEYS.gasSyncMode
   ], (items) => {
     isCollapsed = items[STORAGE_KEYS.collapsed] || false;
     currentWidth = items[STORAGE_KEYS.sidebarWidth] || DEFAULT_WIDTH;
@@ -1971,18 +2454,17 @@
     showRuneExcludedDefense = items[STORAGE_KEYS.showRuneExcludedDefense] !== undefined ? items[STORAGE_KEYS.showRuneExcludedDefense] : true;
     showRuneExcludedDefenseInput.checked = showRuneExcludedDefense;
 
+    const gasUrl = items[STORAGE_KEYS.gasUrl] || "";
+    gasUrlInput.value = gasUrl;
+
+    gasSyncMode = items[STORAGE_KEYS.gasSyncMode] || false;
+    gasSyncModeInput.checked = gasSyncMode;
+
     // Apply dynamic width properties immediately
     host.style.setProperty('--sidebar-width', `${currentWidth}px`);
 
     document.documentElement.style.transition = 'padding-right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
     document.documentElement.style.boxSizing = 'border-box';
-
-    // Collapsing toggle click event handler
-    toggleBtn.addEventListener('click', () => {
-      isCollapsed = !sidebarContainer.classList.contains('collapsed');
-      updatePageLayout(isCollapsed);
-      chrome.storage.sync.set({ [STORAGE_KEYS.collapsed]: isCollapsed });
-    });
 
     updatePageLayout(isCollapsed);
     renderSavedList();
@@ -1990,6 +2472,33 @@
 
     // Initial calculation for any items already rendered on the page
     applyRuneExcludedDefenseToAll();
+
+    // Calculate initial storage usage warning status
+    checkStorageUsage();
+
+    // If sync mode is ON, sync pull from cloud silently in background on boot
+    if (gasSyncMode && gasUrl) {
+      isPullingFromCloud = true;
+      syncPullFromCloud()
+        .then(cloudData => {
+          savedSearches = cloudData.searches;
+          savedFolders = cloudData.folders;
+          storageSet({
+            [STORAGE_KEYS.savedSearches]: savedSearches,
+            [STORAGE_KEYS.savedFolders]: savedFolders
+          }, () => {
+            isPullingFromCloud = false;
+            renderSavedList();
+            renderTagFilters();
+            checkStorageUsage();
+            console.log('PoE2 Trade Extension: Boot auto-sync completed.');
+          });
+        })
+        .catch(err => {
+          isPullingFromCloud = false;
+          console.error('PoE2 Trade Extension: Boot auto-sync failed:', err);
+        });
+    }
 
     // Register MutationObserver to handle dynamically added items (Infinite Scroll / Live Search)
     const observer = new MutationObserver((mutations) => {

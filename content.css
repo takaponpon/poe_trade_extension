@@ -1399,5 +1399,103 @@ input:checked + .slider:before {
   border-color: var(--poe-gold-bright);
 }
 
+/* ==========================================
+   Toast Notification Styles
+   ========================================== */
+.toast-notification {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(12, 13, 16, 0.95);
+  border: 1px solid var(--poe-gold-dim);
+  border-radius: 6px;
+  color: var(--poe-text);
+  font-family: var(--font-body);
+  font-size: 12px;
+  padding: 10px 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 0 0 10px rgba(200, 156, 60, 0.15);
+  z-index: 10001;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast-notification.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.toast-notification.toast-warning {
+  border-color: var(--poe-amber);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 0 0 10px rgba(230, 126, 34, 0.15);
+}
+
+/* ==========================================
+   Storage Warning & Google Drive Sync UI
+   ========================================== */
+.storage-warning-box {
+  color: #ff4a4a;
+  font-size: 10px;
+  margin-top: 6px;
+  padding: 6px;
+  background: rgba(255, 74, 74, 0.15);
+  border: 1px solid rgba(255, 74, 74, 0.4);
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
+  animation: pulse-red 2s infinite;
+  box-sizing: border-box;
+}
+
+@keyframes pulse-red {
+  0% { box-shadow: 0 0 0 0 rgba(255, 74, 74, 0.4); }
+  70% { box-shadow: 0 0 0 4px rgba(255, 74, 74, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 74, 74, 0); }
+}
+
+.setup-instruction-toggle {
+  font-size: 11px;
+  color: var(--poe-gold);
+  cursor: pointer;
+  text-decoration: underline;
+  display: block;
+  text-align: center;
+  transition: color 0.2s ease;
+  margin-top: 8px;
+}
+
+.setup-instruction-toggle:hover {
+  color: var(--poe-gold-bright);
+}
+
+.gas-instructions-content {
+  font-size: 10px;
+  color: #a3a3a3;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px;
+  border-radius: 4px;
+  margin-top: 6px;
+  border: 1px solid rgba(200, 156, 60, 0.25);
+  max-height: 180px;
+  overflow-y: auto;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.gas-code-block {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 6px;
+  border-radius: 3px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 6px 0;
+  color: #e5e5e5;
+  user-select: all;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
 
 
