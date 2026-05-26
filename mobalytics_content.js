@@ -1,12 +1,12 @@
 /**
- * PoE2 Trade Extension - poe.ninja Content Script
+ * PoE2 Trade Extension - Mobalytics Content Script
  * Injects a premium, modern, and highly interactive right-side sidebar UI
- * that parses a character's PoB code from poe.ninja and provides one-click
- * Japanese trade search for all equipped gear.
+ * that parses a character's PoB code from Mobalytics pages, provides one-click
+ * Japanese trade search for all equipped gear, and adds a page-translation bypass helper.
  */
 
-(function () {
-  console.log("PoE2 Trade Extension: poe.ninja content script initialized.");
+(async function () {
+  console.log("PoE2 Trade Extension: Mobalytics content script initialized.");
 
   // Configuration constants (shared with main extension)
   const STORAGE_KEYS = {
@@ -28,8 +28,9 @@
   let pobCodeLoaded = false;
   let parsedGear = null;
 
-  // Helper to normalize league names from poe.ninja to official PoE2 API league IDs
+  // Helper to normalize league names from Mobalytics/PoB to official PoE2 API league IDs
   function normalizeLeagueName(urlLeague) {
+    if (!urlLeague) return "Standard";
     const lower = urlLeague.toLowerCase().trim();
     const map = {
       "vaal": "Fate of the Vaal",
@@ -42,21 +43,12 @@
   }
 
   // 1. Check URL Matching
-  // Must match: https://poe.ninja/poe2/builds/{league}/character/{player}/{character}?*
   function isTargetUrl() {
     const url = window.location.href;
-    // Pattern: poe.ninja/poe2/builds/[league]/character/[player]/[char]
-    const match = url.match(/poe\.ninja\/poe2\/builds\/([^/]+)\/character\/([^/]+)\/([^/?#]+)/i);
-    if (match) {
-      // Extract league name from URL and normalize it for PoE2 API
-      const rawLeague = decodeURIComponent(match[1]);
-      activeLeague = normalizeLeagueName(rawLeague);
-      return true;
-    }
-    return false;
+    return url.toLowerCase().includes('mobalytics.gg/poe-2/builds/');
   }
 
-  console.log(`PoE2 Trade Extension: Initializing sidebar components...`);
+  console.log(`PoE2 Trade Extension: Initializing sidebar components for Mobalytics...`);
 
   // 2. Create Host Element in the Document root
   const host = document.createElement('div');
@@ -87,6 +79,14 @@
     <div class="sidebar-header">
       <div class="sidebar-title">PoE2 Gear Exporter</div>
       <div class="sidebar-subtitle">Japanese Trade Search</div>
+      
+      <!-- Translate Unlock Button -->
+      <button class="translate-unlock-btn" id="translateUnlockBtn" title="和訳ができないバグを解除し、ブラウザ機能で翻訳可能にします">
+        <svg viewBox="0 0 24 24">
+          <path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v2h11.17C11.5 7.69 10.56 9.18 9.5 10.5c-.66-.74-1.2-1.53-1.62-2.38H5.78c.55 1.25 1.34 2.41 2.3 3.44L2.83 16l1.41 1.41 5.26-5.26 2.54 2.54 3.32 3.32.08-.07V15.07zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/>
+        </svg>
+        <span>ページ和訳バグを解除</span>
+      </button>
     </div>
 
     <div class="sidebar-content" id="sidebarContent">
@@ -111,10 +111,17 @@
     toastEl.textContent = message;
     toastEl.className = 'toast-notification';
     if (type === 'warning') toastEl.classList.add('toast-warning');
+    if (type === 'success') {
+      toastEl.style.borderColor = '#2ecc71';
+      toastEl.style.color = '#2ecc71';
+    } else {
+      toastEl.style.borderColor = '';
+      toastEl.style.color = '';
+    }
     toastEl.classList.add('visible');
     setTimeout(() => {
       toastEl.classList.remove('visible');
-    }, 3000);
+    }, 4000);
   }
 
   // UI Element Selectors
@@ -123,6 +130,7 @@
   const statusBox = shadow.getElementById('statusBox');
   const gearListContainer = shadow.getElementById('gearListContainer');
   const sidebarContent = shadow.getElementById('sidebarContent');
+  const translateUnlockBtn = shadow.getElementById('translateUnlockBtn');
 
   // Load Translation Map in background
   async function loadTranslationMap() {
@@ -148,6 +156,34 @@
     }
   }
   loadTranslationMap();
+
+  // Register Translate Unlock Handler
+  translateUnlockBtn.addEventListener('click', () => {
+    try {
+      let count = 0;
+      // Staticize all contenteditable rich-text elements on the page (Lexical editor elements)
+      document.querySelectorAll('[contenteditable]').forEach(el => {
+        const clone = el.cloneNode(true);
+        clone.removeAttribute('contenteditable');
+        clone.removeAttribute('data-lexical-editor');
+        clone.querySelectorAll('[contenteditable]').forEach(child => {
+          child.removeAttribute('contenteditable');
+          child.removeAttribute('data-lexical-editor');
+        });
+        el.parentNode.replaceChild(clone, el);
+        count++;
+      });
+      
+      if (count > 0) {
+        showToast("和訳バグを解除しました！ブラウザの翻訳機能を実行してください。", "success");
+      } else {
+        showToast("解除可能な要素が見つかりませんでした。（すでに実行済みか、エディタ要素がありません）", "info");
+      }
+    } catch (err) {
+      console.error("Error in translation unlock:", err);
+      showToast("和訳バグの解除中にエラーが発生しました", "warning");
+    }
+  });
 
   // 6. Sidebar Resize / Collapse Functionality
   function updatePageLayout(collapsed) {
@@ -256,7 +292,6 @@
     const gearList = {};
     
     // 1. Get slot assignments
-    // Example: <Slot name="Helmet" itemId="7"/>
     const slotRegex = /<Slot\s+[^>]*name="([^"]+)"[^>]*itemId="(\d+)"[^>]*\/?>/gi;
     const slotMap = {};
     let match;
@@ -270,7 +305,7 @@
       slotMap[match[2]] = parseInt(match[1], 10);
     }
 
-    // 1.5 Get passive tree socket assignments for Jewels (nodeId and itemId)
+    // Passive tree socket assignments for Jewels (nodeId and itemId)
     const socketRegex = /<Socket\s+[^>]*nodeId="(\d+)"[^>]*itemId="(\d+)"[^>]*\/?>/gi;
     let jewelCounter = 1;
     while ((match = socketRegex.exec(xml)) !== null) {
@@ -285,7 +320,6 @@
     while ((match = socketRegexRev.exec(xml)) !== null) {
       const itemId = parseInt(match[1], 10);
       if (itemId > 0) {
-        // Find next available Jewel index
         while (slotMap[`Jewel ${jewelCounter}`] !== undefined) {
           jewelCounter++;
         }
@@ -358,7 +392,7 @@
       }
     }
 
-    // Extract Explicit Mods (everything after implicits until "Corrupted" or end)
+    // Extract Explicit Mods
     if (modStartIdx >= 0) {
       for (let i = modStartIdx; i < lines.length; i++) {
         const line = lines[i];
@@ -366,8 +400,6 @@
         result.explicits.push(parseModLine(line, "explicit", isBaseEnchantable, runeLines));
       }
     } else {
-      // If no implicits section, explicits start after metadata lines
-      // Usually metadata lines start after type name. Let's find first line that isn't metadata
       let metadataDone = false;
       for (let i = 3; i < lines.length; i++) {
         const line = lines[i];
@@ -394,28 +426,21 @@
     text = line.replace(tagRegex, "").trim();
 
     let sourceCategory = defaultCategory;
-    
-    // Determine category based on line prefix or tags
     const normalizedText = text.toLowerCase();
-    
     let isRealRuneEnchant = false;
     const isCrafted = tags.includes("crafted") || tags.includes("enchant") || tags.includes("enchanted");
     
     if (isEnchantable && isCrafted) {
-      // If it's a crafted mod on a Weapons/Armours base, verify it exists in the declared Rune lines
       const modLower = text.toLowerCase();
       isRealRuneEnchant = runeLines.some(runeText => {
-        // Compare by removing all digits and non-alphabetic chars to avoid slight formatting/range mismatches
         const rNorm = runeText.replace(/[^a-zA-Z]/g, "");
         const mNorm = modLower.replace(/[^a-zA-Z]/g, "");
         return rNorm === mNorm || modLower.includes(runeText) || runeText.includes(modLower);
       });
     }
 
-    // Only assign "enchant" if it's a Weapons/Armours base AND it's verified as a real Rune enchant!
     if (isEnchantable && (normalizedText.startsWith("enchant: ") || normalizedText.startsWith("enchantment: ") || isRealRuneEnchant)) {
       sourceCategory = "enchant";
-      // Strip Enchant prefix if present
       if (text.toLowerCase().startsWith("enchant: ")) text = text.substring(9).trim();
       else if (text.toLowerCase().startsWith("enchantment: ")) text = text.substring(13).trim();
     } else if (normalizedText.startsWith("desecrated: ") || tags.includes("desecrated") || tags.includes("scourged") || tags.includes("scourge") || tags.includes("corrupted")) {
@@ -425,7 +450,6 @@
       sourceCategory = "implicit";
     }
 
-    // If it was marked crafted/augmented but it is NOT a real rune enchant, add a virtual tag so handleGearClick can easily skip it
     if (isCrafted && !isRealRuneEnchant) {
       tags.push("fake_enchant_augment");
     }
@@ -436,9 +460,9 @@
   // 8. Gear Slots Mapping Definition (Order of rendering in Sidebar)
   const TARGET_SLOTS = [
     { key: "Weapon 1", label: "武器セット 1 (メイン)" },
-    { key: "Weapon 2", label: "武器セット 1 (オフハンド/盾/矢筒)" }, // In PoB, Weapon 2 is the offhand for set 1
-    { key: "Weapon 1 Swap", label: "武器セット 2 (裏メイン)" }, // Weapon 1 Swap is mainhand for set 2
-    { key: "Weapon 2 Swap", label: "武器セット 2 (裏オフハンド/盾/矢筒)" }, // Weapon 2 Swap is offhand for set 2
+    { key: "Weapon 2", label: "武器セット 1 (オフハンド/盾/矢筒)" },
+    { key: "Weapon 1 Swap", label: "武器セット 2 (裏メイン)" },
+    { key: "Weapon 2 Swap", label: "武器セット 2 (裏オフハンド/盾/矢筒)" },
     { key: "Helmet", label: "兜 (Helmet)" },
     { key: "Body Armour", label: "鎧 (Body Armour)" },
     { key: "Gloves", label: "手袋 (Gloves)" },
@@ -455,7 +479,6 @@
     { key: "Flask 2", label: "フラスコ 2" }
   ];
 
-  // Jewel groups (max 40)
   function getJewelSlots(slotMap) {
     const jewels = [];
     for (let i = 1; i <= 40; i++) {
@@ -470,20 +493,18 @@
     return jewels;
   }
 
-  // Translate item details to Japanese using itemsTranslationMap
+  // Translate item details to Japanese
   function translateItemDetails(item) {
     let jpName = item.name;
     let jpBase = item.base;
 
     if (itemsTranslationMap) {
-      // 1. Translate Name
       if (item.rarity === "UNIQUE" && item.name && item.name.trim() !== "") {
         const rawName = item.name.trim();
         const normRawName = normalizeKey(rawName);
         jpName = itemsTranslationMap.names[normRawName]?.jp || rawName;
       }
 
-      // 2. Translate Base Type
       const rawBase = (item.base && item.base.trim() !== "") ? item.base.trim() : (item.name && item.name.trim() !== "" ? item.name.trim() : null);
       if (rawBase) {
         let prefix = "";
@@ -508,21 +529,18 @@
     return { name: jpName, base: jpBase };
   }
 
-  // Render Gear List to the Sidebar HTML (1 column, vertically stacked accordion)
+  // Render Gear List
   function renderGearList(pobData) {
     const { slotMap, itemMap } = pobData;
     parsedGear = pobData; // cache globally
 
     let html = '';
-    
-    // Group targets into categories
     const groups = [
       { title: "武器 & 防具", slots: TARGET_SLOTS.slice(0, 8) },
       { title: "アクセサリー", slots: TARGET_SLOTS.slice(8, 13) },
       { title: "チャーム & フラスコ", slots: TARGET_SLOTS.slice(13, 18) }
     ];
 
-    // Add Jewels group dynamically if present
     const jewelSlots = getJewelSlots(slotMap);
     if (jewelSlots.length > 0) {
       groups.push({ title: "ジュエル (Jewels)", slots: jewelSlots });
@@ -546,7 +564,6 @@
 
         if (item) {
           const rarityClass = `rarity-${item.rarity.toLowerCase()}`;
-          // Translate item details to Japanese for UI display
           const jpItem = translateItemDetails(item);
           
           html += `
@@ -558,7 +575,6 @@
             </div>
           `;
         } else {
-          // Render empty slot
           html += `
             <div class="gear-item empty-slot">
               <div class="gear-item-header">
@@ -582,13 +598,11 @@
     gearListContainer.style.flexDirection = 'column';
     gearListContainer.style.gap = '10px';
 
-    // Register Accordion Collapsible Event Handlers
     const headers = gearListContainer.querySelectorAll('.collapsible-header');
     headers.forEach(header => {
       header.addEventListener('click', () => {
         const targetId = header.getAttribute('data-target');
         const content = gearListContainer.querySelector(`#${targetId}`);
-        
         if (content.classList.contains('active')) {
           header.classList.add('collapsed');
           content.classList.remove('active');
@@ -599,7 +613,6 @@
       });
     });
 
-    // Register Click Event Handlers for Gear Items
     const items = gearListContainer.querySelectorAll('.gear-item:not(.empty-slot)');
     items.forEach(el => {
       el.addEventListener('click', () => {
@@ -610,24 +623,18 @@
     });
   }
 
-  // Normalize mod text for map lookup (numeric replacement to '#')
   function normalizeModTextForLookup(text) {
-    // Strip leading '+' in numbers
     let norm = text.replace(/\+(\d+)/g, '$1');
-    // Replace all numbers (ints or floats) with '#'
     norm = norm.replace(/\d+(?:\.\d+)?/g, '#');
-    // Lowercase and trim multiple spaces
     return norm.toLowerCase().replace(/\s+/g, ' ').trim();
   }
 
-  // Normalize unique/base name keys by lowercasing and stripping all apostrophes, HTML entities like &apos;, and quotes
   function normalizeKey(str) {
     if (!str) return "";
     let norm = str.replace(/&apos;/g, "'").replace(/&quot;/g, '"');
     return norm.toLowerCase().replace(/['"`’‘“”]/g, "").replace(/\s+/g, " ").trim();
   }
 
-  // 9. Build Query and Call Official Trade API on Click
   // 9. Build Query and Call Official Trade API on Click
   async function handleGearClick(slotKey, itemId) {
     try {
@@ -644,7 +651,6 @@
 
       showToast(`${item.name} の検索結果を構築中...`);
 
-      // Determine category based on slot
       let category = null;
       if (slotKey.startsWith("Helmet")) category = "armour.helmet";
       else if (slotKey.startsWith("Body Armour")) category = "armour.body";
@@ -658,12 +664,10 @@
       else if (slotKey.startsWith("Jewel") || slotKey.startsWith("PassiveJewel")) category = "jewel";
       else if (slotKey.startsWith("Shield")) category = "armour.shield";
 
-      // Setup Mod Lookups
       const apiFilters = [];
       const allMods = [...item.implicits, ...item.explicits];
-
-      // Build EN inverse index on the fly for matching speed
       const enLookupMap = {};
+      
       for (const [id, info] of Object.entries(translationMap)) {
         if (info.en) {
           const key = info.en.toLowerCase().replace(/\s+/g, ' ').replace(/\+#/g, '#');
@@ -675,8 +679,6 @@
       }
 
       allMods.forEach(mod => {
-        // Skip all socketed Runes and slotted Augments (classified as "enchant" or possessing crafted/augmented tags)
-        // Players slot these dynamically, so they must be completely excluded from base item trade searches.
         const isSocketedOrAugmented = mod.sourceCategory === "enchant" || 
                                      mod.tags.includes("crafted") || 
                                      mod.tags.includes("augmented") || 
@@ -689,13 +691,11 @@
         }
 
         const normalizedText = mod.text.toLowerCase();
-        // Fallback text-based skip for any remaining Augment modifiers
         if (normalizedText.includes("augmented") || normalizedText.includes("augment")) {
           console.log("PoE2 Trade Extension: Skipping Augment mod based on text:", mod.text);
           return;
         }
 
-        // Extract numbers to set as min value
         const numRegex = /([+-]?\d+(?:\.\d+)?)/g;
         const values = [];
         let m;
@@ -703,11 +703,8 @@
           values.push(parseFloat(m[1]));
         }
 
-        // Create search key
         let searchKey = normalizeModTextForLookup(mod.text).replace(/\+#/g, '#');
         
-        // Prioritize local mod variants for Weapons and Armours
-        // Offhand items like Quivers and Shields should be excluded from local priority to correctly match global implicit stats (like Attack Speed)
         const baseLower = (item.base || item.name || "").toLowerCase();
         const isQuiverOrShield = baseLower.includes("quiver") || baseLower.includes("shield") || baseLower.includes("矢筒") || baseLower.includes("盾");
         
@@ -725,18 +722,14 @@
           }
         }
 
-        // Look up in translationMap
         let matches = enLookupMap[searchKey] || [];
-        
         if (matches.length === 0) {
-          // Try without + sign as fallback
           const searchKeyNoPlus = searchKey.replace(/\+/g, '');
           matches = enLookupMap[searchKeyNoPlus] || [];
         }
 
         let finalMatch = null;
         if (matches.length > 0) {
-          // Prioritize the match that corresponds to mod.sourceCategory (e.g. implicit., enchant., explicit., desecrated.)
           const expectedPrefix = (mod.sourceCategory || "explicit") + ".";
           let categoryMatch = matches.find(m => m.id.startsWith(expectedPrefix));
           
@@ -749,22 +742,15 @@
           if (categoryMatch) {
             finalMatch = categoryMatch;
           } else {
-            // Fallback to the first match
             finalMatch = matches[0];
           }
         }
 
         if (finalMatch) {
-          const filterObj = {
-            id: finalMatch.id
-          };
-
-          // Only include "value" property if there's an actual numeric value extracted
+          const filterObj = { id: finalMatch.id };
           if (values.length > 0) {
             const filterVal = {};
             const rawVal = values[0];
-            
-            // Don't downgrade negative values or resistances if too low, but for general stats:
             if (rawVal > 10) {
               filterVal.min = Math.floor(rawVal * 0.9);
             } else {
@@ -772,12 +758,10 @@
             }
             filterObj.value = filterVal;
           }
-
           apiFilters.push(filterObj);
         }
       });
 
-      // Build the query object
       const queryPayload = {
         "query": {
           "status": {
@@ -789,7 +773,6 @@
         }
       };
 
-      // Only include "stats" filter group if we actually matched some filters
       if (apiFilters.length > 0) {
         queryPayload.query.stats = [
           {
@@ -799,7 +782,6 @@
         ];
       }
 
-      // Add category filter if defined and the item has no base type/name to prevent API conflicts
       const hasBaseType = (item.base && item.base.trim() !== "") || (item.name && item.name.trim() !== "");
       if (category && !hasBaseType) {
         queryPayload.query.filters = {
@@ -813,7 +795,6 @@
         };
       }
 
-      // Resolve item base and name to Japanese / English properly to prevent language mixing
       const enName = item.name ? item.name.trim() : null;
       const enBase = (item.base && item.base.trim() !== "") ? item.base.trim() : (item.name && item.name.trim() !== "" ? item.name.trim() : null);
 
@@ -821,7 +802,6 @@
       let jpBase = null;
 
       if (itemsTranslationMap) {
-        // 1. Resolve Unique Name (Japanese)
         if (item.rarity === "UNIQUE" && enName) {
           const normRawName = normalizeKey(enName);
           const nameEntry = itemsTranslationMap.names[normRawName];
@@ -830,7 +810,6 @@
           }
         }
 
-        // 2. Resolve Base Type (Japanese)
         if (enBase) {
           let prefix = "";
           let coreBase = enBase;
@@ -853,21 +832,17 @@
         }
       }
 
-      // Determine search domain & align query languages strictly
       let isTranslated = false;
       if (item.rarity === "UNIQUE") {
-        // Unique items: Both the translated unique name and translated base type must exist to search in Japanese
         if (jpName && jpBase) {
           isTranslated = true;
         }
       } else {
-        // Non-unique items: Only the translated base type needs to exist
         if (jpBase) {
           isTranslated = true;
         }
       }
 
-      // Populate query with strictly aligned language terms to avoid Unknown item name (HTTP 400)
       if (isTranslated) {
         if (item.rarity === "UNIQUE") {
           queryPayload.query.name = jpName;
@@ -876,10 +851,6 @@
           queryPayload.query.type = jpBase;
         }
       } else {
-        // Fallback to English.
-        // Use the original English names from PoB/API.
-        // Note: For unique items, we must use the original enName (which contains apostrophes).
-        // The GGG English API expects exact names with apostrophes (e.g. "Hyrri's Ire").
         const originalEnName = (item.rarity === "UNIQUE" && enName) ? (itemsTranslationMap?.names[normalizeKey(enName)]?.en || enName) : enName;
         const originalEnBase = enBase ? (itemsTranslationMap?.types[normalizeKey(enBase)]?.en || enBase) : enBase;
 
@@ -893,7 +864,6 @@
 
       console.log("PoE2 Trade Extension: Sending query payload:", queryPayload);
 
-      // Call the Trade search API via Background Script to bypass CORS restrictions
       chrome.runtime.sendMessage(
         {
           type: "POB_TRADE_SEARCH",
@@ -911,8 +881,6 @@
           if (response && response.success) {
             const result = response.data;
             console.log("PoE2 Trade Extension: Search registered via background proxy. Hash:", result.id);
-
-            // Launch the appropriate Trade site in a new tab (English or Japanese)
             const domain = !isTranslated ? "www.pathofexile.com" : "jp.pathofexile.com";
             const jpSearchUrl = `https://${domain}/trade2/search/poe2/${encodeURIComponent(activeLeague)}/${result.id}`;
             window.open(jpSearchUrl, '_blank');
@@ -930,48 +898,80 @@
     }
   }
 
-  // 10. MutationObserver to watch POB Input Element
-  let observer = null;
+  // 10. Watcher to poll Mobalytics POB input element
+  let checkInterval = null;
   function watchPobInput() {
-    // Check if element is already on the page
-    const input = document.querySelector('input[aria-label="Import code for Path of Building"]');
-    if (input && input.value) {
-      handlePobCode(input.value);
-      return;
-    }
+    if (checkInterval) clearInterval(checkInterval);
 
-    // Otherwise observe DOM additions
-    observer = new MutationObserver((mutations) => {
-      const el = document.querySelector('input[aria-label="Import code for Path of Building"]');
-      if (el && el.value && !pobCodeLoaded) {
-        handlePobCode(el.value);
+    checkInterval = setInterval(() => {
+      const input = document.getElementById('poe2PobCode');
+      if (input && input.value && !pobCodeLoaded) {
+        handlePobCode(input.value);
       }
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
+    }, 1000);
   }
 
-  function handlePobCode(code) {
+  async function handlePobCode(code) {
     if (pobCodeLoaded) return;
     pobCodeLoaded = true;
     console.log("PoE2 Trade Extension: Found POB Import code. Length:", code.length);
-    
-    if (observer) {
-      observer.disconnect();
+
+    if (checkInterval) {
+      clearInterval(checkInterval);
+      checkInterval = null;
     }
 
     try {
-      const xml = decodePoBExport(code);
+      let rawCode = code.trim();
+      
+      // If code is a link (like pobb.in or other URL), fetch the raw content
+      if (rawCode.startsWith('http://') || rawCode.startsWith('https://')) {
+        let fetchUrl = rawCode;
+        if (rawCode.includes('pobb.in/')) {
+          const match = rawCode.match(/pobb\.in\/([^/]+)/);
+          if (match) {
+            fetchUrl = `https://pobb.in/${match[1]}/raw`;
+          }
+        }
+        
+        statusBox.innerHTML = `
+          <div class="status-loading">
+            <div class="spinner"></div>
+            <span>リンク先からPoBコードを取得中...</span>
+          </div>
+        `;
+        showToast("リンク先からPoBコードを取得中...");
+        
+        const res = await fetch(fetchUrl);
+        if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+        rawCode = await res.text();
+        rawCode = rawCode.trim();
+      }
+
+      const xml = decodePoBExport(rawCode);
+      
+      // Parse active league directly from PoB XML
+      const leagueMatch = xml.match(/<Build\s+[^>]*league="([^"]+)"/i);
+      if (leagueMatch) {
+        activeLeague = normalizeLeagueName(decodeURIComponent(leagueMatch[1]));
+        console.log(`PoE2 Trade Extension: League detected from PoB XML: "${activeLeague}"`);
+      } else {
+        activeLeague = 'Standard';
+      }
+
       const parsedData = parsePoBXml(xml);
       console.log("PoE2 Trade Extension: Successfully parsed PoB XML. Gear found:", Object.keys(parsedData.itemMap).length);
       
-      // Render gear to sidebar
       renderGearList(parsedData);
       showToast("装備品リストを読み込みました");
     } catch (e) {
       console.error("PoE2 Trade Extension: Failed to parse POB XML:", e);
       statusBox.innerHTML = `<span style="color: #e74c3c;">PoBコードの解析に失敗しました。</span>`;
       showToast("PoBコードのデコードに失敗しました", "warning");
+      
+      // Restart watching in case code changes or user tries again
+      pobCodeLoaded = false;
+      watchPobInput();
     }
   }
 
@@ -980,24 +980,19 @@
 
   function checkUrlChange() {
     const currentUrl = window.location.href;
-    
-    // Safety check: if we are on the target URL but the sidebar is hidden, force restore it.
     const target = isTargetUrl();
     const isDisplayed = host.style.display !== 'none' && sidebarContainer.style.display !== 'none';
     
     if (target && !isDisplayed) {
       console.log("PoE2 Trade Extension: Target URL active but sidebar was hidden. Restoring UI visibility.");
-      // Just restore display styles and layout padding without resetting the parsed gear state!
       host.style.display = 'block';
       sidebarContainer.style.display = 'block';
       updatePageLayout(isCollapsed);
       
-      // If we have parsed gear, make sure it is rendered and list is visible
       if (parsedGear) {
         statusBox.style.display = 'none';
         gearListContainer.style.display = 'flex';
       } else {
-        // Otherwise initiate a normal load
         lastUrl = currentUrl;
         handleUrlChange();
       }
@@ -1011,7 +1006,6 @@
     console.log(`PoE2 Trade Extension: URL changed to ${window.location.href}`);
     
     if (isTargetUrl()) {
-      // Re-show sidebar and reset loading states
       host.style.display = 'block';
       sidebarContainer.style.display = 'block';
       statusBox.style.display = 'block';
@@ -1026,18 +1020,15 @@
       pobCodeLoaded = false;
       parsedGear = null;
       
-      // Update padding-right to show sidebar space
       updatePageLayout(isCollapsed);
-
-      // Start watching POB input on the new page
       watchPobInput();
     } else {
-      // Hide sidebar on non-matching pages
       host.style.display = 'none';
       document.documentElement.style.paddingRight = '0px';
       
-      if (observer) {
-        observer.disconnect();
+      if (checkInterval) {
+        clearInterval(checkInterval);
+        checkInterval = null;
       }
       pobCodeLoaded = false;
       parsedGear = null;
@@ -1045,7 +1036,7 @@
   }
 
   // Start polling for URL changes (SPA support)
-  setInterval(checkUrlChange, 500);
+  setInterval(checkUrlChange, 1000);
 
   // Initial trigger
   handleUrlChange();

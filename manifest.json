@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "PoE2 Trade Sidebar Extension",
-  "version": "1.0.2",
+  "version": "1.3.0",
   "description": "Path of Exile 2 Trade Site Sidebar Extension. Injects a premium customizable sidebar UI on the right side of the screen.",
   "permissions": [
     "storage"
@@ -33,6 +33,13 @@
       ],
       "js": ["pako.min.js", "poe_ninja_content.js"],
       "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "https://mobalytics.gg/poe-2/builds/*"
+      ],
+      "js": ["pako.min.js", "mobalytics_content.js"],
+      "run_at": "document_end"
     }
   ],
   "background": {
@@ -51,7 +58,8 @@
       ],
       "matches": [
         "https://*.pathofexile.com/*",
-        "https://poe.ninja/*"
+        "https://poe.ninja/*",
+        "https://mobalytics.gg/*"
       ]
     }
   ]
