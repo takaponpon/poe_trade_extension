@@ -1,6 +1,6 @@
 {
   "name": "poe-trade-sidebar-extension",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Path of Exile 2 Trade Site Sidebar Extension",
   "main": "background.js",
   "scripts": {
