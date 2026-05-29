@@ -45,7 +45,7 @@
   // 1. Check URL Matching
   function isTargetUrl() {
     const url = window.location.href.toLowerCase();
-    return url.includes('mobalytics.gg/poe-2/builds/') || url.includes('mobalytics.gg/poe2/builds/');
+    return url.includes('mobalytics.gg/poe-2/') || url.includes('mobalytics.gg/poe2/');
   }
 
   console.log(`PoE2 Trade Extension: Initializing sidebar components for Mobalytics...`);
