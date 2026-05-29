@@ -419,7 +419,10 @@ export function renderSavedList() {
     folderHeader.addEventListener('click', (e) => {
       if (e.target.closest('.folder-trash-btn') || e.target.closest('.in-place-folder-confirm')) return;
       folder.isCollapsed = !folder.isCollapsed;
-      triggerFoldersChanged();
+      storageSet({ [STORAGE_KEYS.savedFolders]: state.savedFolders }, () => {
+        renderSavedList();
+        triggerFoldersChanged();
+      });
     });
 
     folderHeader.querySelector('.folder-trash-btn').addEventListener('click', (e) => {
