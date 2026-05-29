@@ -36,7 +36,10 @@
     },
     {
       "matches": [
-        "https://mobalytics.gg/poe-2/builds/*"
+        "https://mobalytics.gg/poe-2/builds/*",
+        "https://*.mobalytics.gg/poe-2/builds/*",
+        "https://mobalytics.gg/poe2/builds/*",
+        "https://*.mobalytics.gg/poe2/builds/*"
       ],
       "js": ["pako.min.js", "mobalytics_content.js"],
       "run_at": "document_end"
@@ -59,7 +62,8 @@
       "matches": [
         "https://*.pathofexile.com/*",
         "https://poe.ninja/*",
-        "https://mobalytics.gg/*"
+        "https://mobalytics.gg/*",
+        "https://*.mobalytics.gg/*"
       ]
     }
   ]

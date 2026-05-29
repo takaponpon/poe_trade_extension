@@ -44,8 +44,8 @@
 
   // 1. Check URL Matching
   function isTargetUrl() {
-    const url = window.location.href;
-    return url.toLowerCase().includes('mobalytics.gg/poe-2/builds/');
+    const url = window.location.href.toLowerCase();
+    return url.includes('mobalytics.gg/poe-2/builds/') || url.includes('mobalytics.gg/poe2/builds/');
   }
 
   console.log(`PoE2 Trade Extension: Initializing sidebar components for Mobalytics...`);
@@ -93,7 +93,12 @@
       <div class="status-box" id="statusBox">
         <div class="status-loading">
           <div class="spinner"></div>
-          <span>PoBコードを探しています...</span>
+          <span>ページ内のPoBリンクを検出中...</span>
+        </div>
+        <div class="manual-input-box" style="margin-top: 15px; border-top: 1px solid var(--poe-border); padding-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+          <span style="font-size: 10px; color: var(--poe-text-muted); text-align: left;">見つからない場合は、PoBリンクまたはコードを貼り付けてください：</span>
+          <input type="text" id="manualPobInput" placeholder="https://pobb.in/... または PoBコード" style="background: rgba(0,0,0,0.3); border: 1px solid var(--poe-border); border-radius: 4px; padding: 6px 10px; color: var(--poe-text); font-family: inherit; font-size: 11px; outline: none; width: 100%; box-sizing: border-box; transition: border-color 0.2s;" />
+          <button id="manualPobSubmit" style="background: var(--poe-bg-panel); border: 1px solid var(--poe-gold); border-radius: 4px; color: var(--poe-gold-bright); padding: 6px; font-size: 10px; font-weight: bold; cursor: pointer; transition: all 0.2s; outline: none;">読み込む</button>
         </div>
       </div>
       <div class="gear-list-container" id="gearListContainer" style="display: none;"></div>
@@ -131,6 +136,42 @@
   const gearListContainer = shadow.getElementById('gearListContainer');
   const sidebarContent = shadow.getElementById('sidebarContent');
   const translateUnlockBtn = shadow.getElementById('translateUnlockBtn');
+
+  // Register manual POB input listeners
+  const manualPobInput = shadow.getElementById('manualPobInput');
+  const manualPobSubmit = shadow.getElementById('manualPobSubmit');
+  
+  if (manualPobInput && manualPobSubmit) {
+    manualPobInput.addEventListener('focus', () => {
+      manualPobInput.style.borderColor = 'var(--poe-gold)';
+    });
+    manualPobInput.addEventListener('blur', () => {
+      manualPobInput.style.borderColor = 'var(--poe-border)';
+    });
+    manualPobInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        manualPobSubmit.click();
+      }
+    });
+    manualPobSubmit.addEventListener('click', () => {
+      const code = manualPobInput.value.trim();
+      if (code) {
+        handlePobCode(code);
+      } else {
+        showToast("PoBリンクまたはコードを入力してください", "warning");
+      }
+    });
+    manualPobSubmit.addEventListener('mouseenter', () => {
+      manualPobSubmit.style.background = 'var(--poe-gold)';
+      manualPobSubmit.style.color = 'var(--poe-bg-darker)';
+      manualPobSubmit.style.boxShadow = '0 0 8px var(--poe-gold-glow)';
+    });
+    manualPobSubmit.addEventListener('mouseleave', () => {
+      manualPobSubmit.style.background = 'var(--poe-bg-panel)';
+      manualPobSubmit.style.color = 'var(--poe-gold-bright)';
+      manualPobSubmit.style.boxShadow = '';
+    });
+  }
 
   // Load Translation Map in background
   async function loadTranslationMap() {
@@ -898,15 +939,28 @@
     }
   }
 
-  // 10. Watcher to poll Mobalytics POB input element
+  // 10. Watcher to poll Mobalytics POB input element and detect page links
   let checkInterval = null;
   function watchPobInput() {
     if (checkInterval) clearInterval(checkInterval);
 
     checkInterval = setInterval(() => {
+      // 1. Try to find the element with ID 'poe2PobCode' (just in case it gets added/set)
       const input = document.getElementById('poe2PobCode');
       if (input && input.value && !pobCodeLoaded) {
+        console.log("PoE2 Trade Extension: Found POB code from poe2PobCode input.");
         handlePobCode(input.value);
+        return;
+      }
+
+      // 2. Automatically find any pobb.in or pathofbuilding.community links on the page!
+      const links = document.querySelectorAll('a[href*="pobb.in"], a[href*="pathofbuilding.community"]');
+      for (const link of links) {
+        if (link.href && !pobCodeLoaded) {
+          console.log("PoE2 Trade Extension: Found POB link in DOM:", link.href);
+          handlePobCode(link.href);
+          return;
+        }
       }
     }, 1000);
   }
